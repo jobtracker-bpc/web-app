@@ -3,6 +3,7 @@ import {
   useAuth0,
   withAuthenticationRequired
 } from "@auth0/auth0-react";
+import Sidebar from "components/Sidebar";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "views/Home";
 import Loading from "views/Loading";
@@ -24,10 +25,13 @@ const AppRouter: React.FC<AppRouterProps> = (props) => {
   }
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/profile" element={<ProtectedProfile />} />
-    </Routes>
+    <div className="flex flex-row">
+      <Sidebar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<ProtectedProfile />} />
+      </Routes>
+    </div>
   );
 };
 
