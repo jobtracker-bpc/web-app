@@ -89,6 +89,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       </div>
       <div>
         <div
+          onClick={() => navigate("/settings")}
           className={classNames(
             "group flex cursor-pointer flex-row items-center py-4 hover:bg-slate-800",
             { "px-2 py-4": isCollapsed }
