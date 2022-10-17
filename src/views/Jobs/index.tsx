@@ -4,13 +4,13 @@ import { UIColor } from "components/UIKit/UIColor";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import { useNavigate } from "react-router-dom";
 
-interface HomeProps {}
+interface JobsProps {}
 
-const Home: React.FC<HomeProps> = (props) => {
+const Jobs: React.FC<JobsProps> = (props) => {
   const { logout } = useAuth0();
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center space-y-10 bg-[#edf2f4] text-4xl">
-      <UIText variant={UITextVariant.heading1}>HomePage</UIText>
+      <UIText variant={UITextVariant.heading1}>Jobs</UIText>
       <div className="flex flex-col space-y-4">
         <UIButton onClick={logout}>Logout</UIButton>
       </div>
@@ -18,4 +18,4 @@ const Home: React.FC<HomeProps> = (props) => {
   );
 };
 
-export default Home;
+export default Jobs;

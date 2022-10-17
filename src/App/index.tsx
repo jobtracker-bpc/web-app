@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import "tailwindcss/tailwind.css";
-import App from "App/AppRouter";
+import AppRouter from "App/AppRouter";
 import {
   AppState,
   Auth0Provider,
@@ -9,7 +9,7 @@ import {
 import { BrowserRouter, useNavigate } from "react-router-dom";
 
 const container = document.getElementById("root") as HTMLDivElement;
-const root = createRoot(container);
+const root = createRoot(container!);
 
 const Auth0ProviderWithRedirectCallback = ({
   children,
@@ -35,7 +35,7 @@ root.render(
       clientId="N0FhVfdkCdgFNMV5N1epwRfurdqwW7yL"
       redirectUri={window.location.origin}
     >
-      <App />
+      <AppRouter />
     </Auth0ProviderWithRedirectCallback>
   </BrowserRouter>
 );
