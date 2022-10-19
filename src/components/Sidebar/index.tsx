@@ -8,6 +8,8 @@ import { HiBriefcase } from "react-icons/hi";
 import { GiSkills } from "react-icons/gi";
 import { RiSettings3Fill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import LogoFull from "../../assets/logo-full.svg";
+import LogoShort from "../../assets/logo-short.svg";
 
 interface SidebarProps {}
 
@@ -38,37 +40,34 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       <div>
         <div
           className={classNames("flex flex-row items-center", {
-            "flex-col-reverse": isCollapsed
+            "flex-col": isCollapsed
           })}
         >
-          <UIText
-            variant={UITextVariant.heading1}
-            color={UIColor.lightGray1}
-            className={classNames("mb-6 pl-6 pt-6 pr-3")}
-          >
-            {!isCollapsed ? "Hire Me" : "HMP."}
-            <div className={UIColor.blue3}>{!isCollapsed ? " Pls." : ""}</div>
-          </UIText>
           <BiArrowFromRight
             className={classNames(
-              "cursor-pointer rounded-md text-[24px] text-slate-300 hover:text-white",
+              "mt-6 mr-4 cursor-pointer rounded-md text-[20px] text-slate-300 hover:text-white",
               {
-                "mt-4 rotate-180": isCollapsed
+                "ml-4 mb-2 rotate-180": isCollapsed
               },
               {
-                "ml-6": !isCollapsed
+                "ml-5": !isCollapsed
               }
             )}
             onClick={() => setIsCollapsed(!isCollapsed)}
           />
+          {isCollapsed ? (
+            <img src={LogoShort} className="mt-4 inline-block " alt="logo" />
+          ) : (
+            <img src={LogoFull} className="mt-6 inline-block w-24" alt="logo" />
+          )}
         </div>
-        <div>
+        <div className="mt-6">
           {menuItems.map((item) => (
             <div
               onClick={() => navigate(item.path)}
               className={classNames(
                 "group flex cursor-pointer flex-row items-center py-2 hover:bg-slate-800",
-                { "pl-2": isCollapsed }
+                { "py-4 pl-2 text-[20px]": isCollapsed }
               )}
             >
               <div className="pl-6 text-slate-300 group-hover:text-white">

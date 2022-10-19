@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.11.0",
+    "@honkhonk/vite-plugin-svgr": "^1.1.0",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "classnames": "^2.3.2",
