@@ -10,12 +10,20 @@ import { RiSettings3Fill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import LogoFull from "../../assets/logo-full.svg";
 import LogoShort from "../../assets/logo-short.svg";
+import { animated, useSpring } from "@react-spring/web";
 
 interface SidebarProps {}
 
 const Sidebar: React.FC<SidebarProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = React.useState<boolean>(false);
   const navigate = useNavigate();
+
+  const springs = useSpring({
+    width: isCollapsed ? "96px" : "200px",
+    config: {
+      duration: 100
+    }
+  });
 
   const menuItems = [
     { index: 1, text: "Dashboard", path: "/", icon: <MdDashboard /> },
@@ -30,12 +38,13 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   ];
 
   return (
-    <div
+    <animated.div
       className={classNames(
         "flex h-screen  flex-col justify-between bg-[#101C24]",
         { "w-24": isCollapsed },
-        { "min-w-[200px]": !isCollapsed }
+        { "w-[200px]": !isCollapsed }
       )}
+      style={{ ...springs }}
     >
       <div>
         <div
@@ -53,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
                 "ml-5": !isCollapsed
               }
             )}
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={() => setIsCollapsed((prev) => !prev)}
           />
           {isCollapsed ? (
             <img src={LogoShort} className="mt-4 inline-block " alt="logo" />
@@ -107,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
           )}
         </div>
       </div>
-    </div>
+    </animated.div>
   );
 };
 
