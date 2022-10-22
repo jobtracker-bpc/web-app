@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import LogoFull from "../../assets/logo-full.svg";
 import LogoShort from "../../assets/logo-short.svg";
 import { animated, useSpring } from "@react-spring/web";
+import UITooltip, { UITooltipPosition } from "components/UIKit/UITooltip";
 
 interface SidebarProps {}
 
@@ -72,49 +73,61 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
         </div>
         <div className="mt-6">
           {menuItems.map((item) => (
-            <div
-              onClick={() => navigate(item.path)}
-              className={classNames(
-                "group flex cursor-pointer flex-row items-center py-2 hover:bg-slate-800",
-                { "py-4 pl-2 text-[20px]": isCollapsed }
-              )}
+            <UITooltip
+              text={item.text}
+              disabled={!isCollapsed}
+              position={UITooltipPosition.right}
             >
-              <div className="pl-6 text-slate-300 group-hover:text-white">
-                {item.icon}
+              <div
+                onClick={() => navigate(item.path)}
+                className={classNames(
+                  "group flex cursor-pointer flex-row items-center py-2 hover:bg-slate-800",
+                  { "py-4 pl-2 text-[20px]": isCollapsed }
+                )}
+              >
+                <div className="pl-6 text-slate-300 group-hover:text-white">
+                  {item.icon}
+                </div>
+                {!isCollapsed && (
+                  <UIText
+                    key={item.index}
+                    variant={UITextVariant.body3}
+                    className="ml-4 text-slate-300 group-hover:text-white"
+                  >
+                    {item.text}
+                  </UIText>
+                )}
               </div>
-              {!isCollapsed && (
-                <UIText
-                  key={item.index}
-                  variant={UITextVariant.body3}
-                  className="ml-4 text-slate-300 group-hover:text-white"
-                >
-                  {item.text}
-                </UIText>
-              )}
-            </div>
+            </UITooltip>
           ))}
         </div>
       </div>
       <div>
-        <div
-          onClick={() => navigate("/settings")}
-          className={classNames(
-            "group flex cursor-pointer flex-row items-center py-4 hover:bg-slate-800",
-            { "px-2 py-4": isCollapsed }
-          )}
+        <UITooltip
+          text="Settings"
+          disabled={!isCollapsed}
+          position={UITooltipPosition.right}
         >
-          <div className="pl-6 text-slate-300  group-hover:text-white">
-            <RiSettings3Fill />
+          <div
+            onClick={() => navigate("/settings")}
+            className={classNames(
+              "group flex cursor-pointer flex-row items-center py-4 hover:bg-slate-800",
+              { "px-2 py-4": isCollapsed }
+            )}
+          >
+            <div className="pl-6 text-slate-300  group-hover:text-white">
+              <RiSettings3Fill />
+            </div>
+            {!isCollapsed && (
+              <UIText
+                variant={UITextVariant.body3}
+                className="ml-4 text-slate-300 group-hover:text-white"
+              >
+                Settings
+              </UIText>
+            )}
           </div>
-          {!isCollapsed && (
-            <UIText
-              variant={UITextVariant.body3}
-              className="ml-4 text-slate-300 group-hover:text-white"
-            >
-              Settings
-            </UIText>
-          )}
-        </div>
+        </UITooltip>
       </div>
     </animated.div>
   );
