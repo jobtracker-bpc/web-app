@@ -12,6 +12,7 @@ import LogoFull from "../../assets/logo-full.svg";
 import LogoShort from "../../assets/logo-short.svg";
 import { animated, useSpring } from "@react-spring/web";
 import UITooltip, { UITooltipPosition } from "components/UIKit/UITooltip";
+import UIIcon, { UIIconType } from "components/UIKit/UIIcon";
 
 interface SidebarProps {}
 
@@ -27,14 +28,29 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   });
 
   const menuItems = [
-    { index: 1, text: "Dashboard", path: "/", icon: <MdDashboard /> },
-    { index: 2, text: "Jobs", path: "/jobs", icon: <HiBriefcase /> },
-    { index: 3, text: "Skills", path: "/skills", icon: <GiSkills /> },
+    {
+      index: 1,
+      text: "Dashboard",
+      path: "/",
+      icon: <UIIcon type={UIIconType.dashboard} />
+    },
+    {
+      index: 2,
+      text: "Jobs",
+      path: "/jobs",
+      icon: <UIIcon type={UIIconType.briefcase} />
+    },
+    {
+      index: 3,
+      text: "Skills",
+      path: "/skills",
+      icon: <UIIcon type={UIIconType.skills} />
+    },
     {
       index: 4,
       text: "Contacts",
       path: "/contacts",
-      icon: <MdPermContactCalendar />
+      icon: <UIIcon type={UIIconType.contacts} />
     }
   ];
 
@@ -116,7 +132,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             )}
           >
             <div className="pl-6 text-slate-300  group-hover:text-white">
-              <RiSettings3Fill />
+              <UIIcon type={UIIconType.settings} />
             </div>
             {!isCollapsed && (
               <UIText
