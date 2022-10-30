@@ -40,7 +40,7 @@ const AppRouter: React.FC<AppRouterProps> = (props) => {
       <div>
         <Sidebar />
       </div>
-      <div className="flex overflow-auto">
+      <div className="flex w-full overflow-auto">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<ProtectedProfile />} />
