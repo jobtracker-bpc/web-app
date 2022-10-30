@@ -20,6 +20,8 @@ const DeveloperSettings: React.FC<JobsProps> = (props) => {
         if (response.ok) {
           console.log(response);
           setResults(response);
+        } else {
+          showToast("Error", JSON.stringify(response.data));
         }
       })
       .catch((err) => {
