@@ -51,6 +51,12 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       text: "Contacts",
       path: "/contacts",
       icon: <UIIcon type={UIIconType.contacts} />
+    },
+    {
+      index: 5,
+      text: "DeveloperSettings",
+      path: "/developer-settings",
+      icon: <UIIcon type={UIIconType.settings} />
     }
   ];
 

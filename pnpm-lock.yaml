@@ -20,6 +20,7 @@ specifiers:
   autoprefixer: ^10.4.12
   babel-jest: ^29.1.2
   classnames: ^2.3.2
+  csstype: ^3.0.10
   eslint: ^8.25.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-import: ^2.26.0
@@ -34,6 +35,7 @@ specifiers:
   prettier-plugin-tailwindcss: ^0.1.13
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-hot-toast: ^2.4.0
   react-icons: ^4.4.0
   react-popper: ^2.3.0
   react-router-dom: '6'
@@ -49,9 +51,11 @@ dependencies:
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   classnames: 2.3.2
+  csstype: 3.1.1
   eslint-plugin-import: 2.26.0_dzvnzej2un7roooznz6ef2if2q
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-hot-toast: 2.4.0_owo25xnefcwdq3zjgtohz6dbju
   react-icons: 4.4.0_react@18.2.0
   react-popper: 2.3.0_r6q5zrenym2zg7je7hgi674bti
   react-router-dom: 6.4.2_biqbaboplfbrettd7655fr4n2y
@@ -3601,6 +3605,14 @@ packages:
     resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
     dev: true
 
+  /goober/2.1.11_csstype@3.1.1:
+    resolution: {integrity: sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==}
+    peerDependencies:
+      csstype: ^3.0.10
+    dependencies:
+      csstype: 3.1.1
+    dev: false
+
   /graceful-fs/4.2.10:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
     dev: true
@@ -4966,6 +4978,20 @@ packages:
 
   /react-fast-compare/3.2.0:
     resolution: {integrity: sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==}
+    dev: false
+
+  /react-hot-toast/2.4.0_owo25xnefcwdq3zjgtohz6dbju:
+    resolution: {integrity: sha512-qnnVbXropKuwUpriVVosgo8QrB+IaPJCpL8oBI6Ov84uvHZ5QQcTp2qg6ku2wNfgJl6rlQXJIQU5q+5lmPOutA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      goober: 2.1.11_csstype@3.1.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - csstype
     dev: false
 
   /react-icons/4.4.0_react@18.2.0:

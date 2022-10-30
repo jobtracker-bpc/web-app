@@ -7,6 +7,7 @@ import {
   Auth0ProviderOptions
 } from "@auth0/auth0-react";
 import { BrowserRouter, useNavigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 const container = document.getElementById("root") as HTMLDivElement;
 const root = createRoot(container!);
@@ -37,5 +38,6 @@ root.render(
     >
       <AppRouter />
     </Auth0ProviderWithRedirectCallback>
+    <Toaster />
   </BrowserRouter>
 );

@@ -6,6 +6,7 @@ import {
 import Sidebar from "components/Sidebar";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Contacts from "views/Contacts";
+import DeveloperSettings from "views/DeveloperSettings";
 import Home from "views/Home";
 import Jobs from "views/Jobs";
 import Loading from "views/Loading";
@@ -23,6 +24,8 @@ const AppRouter: React.FC<AppRouterProps> = (props) => {
   const ProtectedSkills = withAuthenticationRequired(Skills);
   const ProtectedContacts = withAuthenticationRequired(Contacts);
   const ProtectedSettings = withAuthenticationRequired(Settings);
+  const ProtectedDeveloperSettings =
+    withAuthenticationRequired(DeveloperSettings);
 
   if (isLoading) {
     return <Loading />;
@@ -34,15 +37,20 @@ const AppRouter: React.FC<AppRouterProps> = (props) => {
 
   return (
     <div className="flex flex-row">
-      <Sidebar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<ProtectedProfile />} />
-        <Route path="/jobs" element={<ProtectedJobs />} />
-        <Route path="/skills" element={<ProtectedSkills />} />
-        <Route path="/contacts" element={<ProtectedContacts />} />
-        <Route path="/settings" element={<ProtectedSettings />} />
-      </Routes>
+      <div>
+        <Sidebar />
+      </div>
+      <div className="flex overflow-auto">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<ProtectedProfile />} />
+          <Route path="/jobs" element={<ProtectedJobs />} />
+          <Route path="/skills" element={<ProtectedSkills />} />
+          <Route path="/contacts" element={<ProtectedContacts />} />
+          <Route path="/settings" element={<ProtectedSettings />} />
+          <Route path="/developer-settings" element={<DeveloperSettings />} />
+        </Routes>
+      </div>
     </div>
   );
 };
