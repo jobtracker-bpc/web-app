@@ -33,6 +33,7 @@ root.render(
   <BrowserRouter>
     <Auth0ProviderWithRedirectCallback
       domain="dev-j3jbfoh6.us.auth0.com"
+      audience="https://dev-j3jbfoh6.us.auth0.com/api/v2/"
       clientId="N0FhVfdkCdgFNMV5N1epwRfurdqwW7yL"
       redirectUri={window.location.origin}
     >
