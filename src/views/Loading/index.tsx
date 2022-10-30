@@ -1,15 +1,15 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import UIButton from "../../components/UIKit/UIButton";
-import { BiLoaderAlt } from "react-icons/bi";
+import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
+import UIText, { UITextVariant } from "components/UIKit/UIText";
 
 interface LoadingProps {}
 
 const Loading: React.FC<LoadingProps> = (props) => {
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
-      <div className="animate-spin text-purple-700">
-        <BiLoaderAlt className="text-5xl" />
-      </div>
+    <div className="flex h-screen w-screen flex-col items-center justify-center space-y-6">
+      <UIText variant={UITextVariant.body1}>
+        Pain is temporary, but the results are worth it.
+      </UIText>
+      <UILoadingIndicator className="text-6xl text-blue-600" />
     </div>
   );
 };

@@ -10,6 +10,9 @@ import { RiSettings3Fill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import LogoFull from "../../assets/logo-full.svg";
 import LogoShort from "../../assets/logo-short.svg";
+import { animated, useSpring } from "@react-spring/web";
+import UITooltip, { UITooltipPosition } from "components/UIKit/UITooltip";
+import UIIcon, { UIIconType } from "components/UIKit/UIIcon";
 
 interface SidebarProps {}
 
@@ -17,25 +20,48 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = React.useState<boolean>(false);
   const navigate = useNavigate();
 
+  const springs = useSpring({
+    width: isCollapsed ? "96px" : "200px",
+    config: {
+      duration: 100
+    }
+  });
+
   const menuItems = [
-    { index: 1, text: "Dashboard", path: "/", icon: <MdDashboard /> },
-    { index: 2, text: "Jobs", path: "/jobs", icon: <HiBriefcase /> },
-    { index: 3, text: "Skills", path: "/skills", icon: <GiSkills /> },
+    {
+      index: 1,
+      text: "Dashboard",
+      path: "/",
+      icon: <UIIcon type={UIIconType.dashboard} />
+    },
+    {
+      index: 2,
+      text: "Jobs",
+      path: "/jobs",
+      icon: <UIIcon type={UIIconType.briefcase} />
+    },
+    {
+      index: 3,
+      text: "Skills",
+      path: "/skills",
+      icon: <UIIcon type={UIIconType.skills} />
+    },
     {
       index: 4,
       text: "Contacts",
       path: "/contacts",
-      icon: <MdPermContactCalendar />
+      icon: <UIIcon type={UIIconType.contacts} />
     }
   ];
 
   return (
-    <div
+    <animated.div
       className={classNames(
         "flex h-screen  flex-col justify-between bg-[#101C24]",
         { "w-24": isCollapsed },
-        { "min-w-[200px]": !isCollapsed }
+        { "w-[200px]": !isCollapsed }
       )}
+      style={{ ...springs }}
     >
       <div>
         <div
@@ -53,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
                 "ml-5": !isCollapsed
               }
             )}
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={() => setIsCollapsed((prev) => !prev)}
           />
           {isCollapsed ? (
             <img src={LogoShort} className="mt-4 inline-block " alt="logo" />
@@ -63,51 +89,63 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
         </div>
         <div className="mt-6">
           {menuItems.map((item) => (
-            <div
-              onClick={() => navigate(item.path)}
-              className={classNames(
-                "group flex cursor-pointer flex-row items-center py-2 hover:bg-slate-800",
-                { "py-4 pl-2 text-[20px]": isCollapsed }
-              )}
+            <UITooltip
+              text={item.text}
+              disabled={!isCollapsed}
+              position={UITooltipPosition.right}
             >
-              <div className="pl-6 text-slate-300 group-hover:text-white">
-                {item.icon}
+              <div
+                onClick={() => navigate(item.path)}
+                className={classNames(
+                  "group flex cursor-pointer flex-row items-center py-2 hover:bg-slate-800",
+                  { "py-4 pl-2 text-[20px]": isCollapsed }
+                )}
+              >
+                <div className="pl-6 text-slate-300 group-hover:text-white">
+                  {item.icon}
+                </div>
+                {!isCollapsed && (
+                  <UIText
+                    key={item.index}
+                    variant={UITextVariant.body3}
+                    className="ml-4 text-slate-300 group-hover:text-white"
+                  >
+                    {item.text}
+                  </UIText>
+                )}
               </div>
-              {!isCollapsed && (
-                <UIText
-                  key={item.index}
-                  variant={UITextVariant.body3}
-                  className="ml-4 text-slate-300 group-hover:text-white"
-                >
-                  {item.text}
-                </UIText>
-              )}
-            </div>
+            </UITooltip>
           ))}
         </div>
       </div>
       <div>
-        <div
-          onClick={() => navigate("/settings")}
-          className={classNames(
-            "group flex cursor-pointer flex-row items-center py-4 hover:bg-slate-800",
-            { "px-2 py-4": isCollapsed }
-          )}
+        <UITooltip
+          text="Settings"
+          disabled={!isCollapsed}
+          position={UITooltipPosition.right}
         >
-          <div className="pl-6 text-slate-300  group-hover:text-white">
-            <RiSettings3Fill />
+          <div
+            onClick={() => navigate("/settings")}
+            className={classNames(
+              "group flex cursor-pointer flex-row items-center py-4 hover:bg-slate-800",
+              { "px-2 py-4": isCollapsed }
+            )}
+          >
+            <div className="pl-6 text-slate-300  group-hover:text-white">
+              <UIIcon type={UIIconType.settings} />
+            </div>
+            {!isCollapsed && (
+              <UIText
+                variant={UITextVariant.body3}
+                className="ml-4 text-slate-300 group-hover:text-white"
+              >
+                Settings
+              </UIText>
+            )}
           </div>
-          {!isCollapsed && (
-            <UIText
-              variant={UITextVariant.body3}
-              className="ml-4 text-slate-300 group-hover:text-white"
-            >
-              Settings
-            </UIText>
-          )}
-        </div>
+        </UITooltip>
       </div>
-    </div>
+    </animated.div>
   );
 };
 
