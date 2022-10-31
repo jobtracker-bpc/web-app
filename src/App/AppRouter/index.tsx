@@ -3,6 +3,7 @@ import {
   useAuth0,
   withAuthenticationRequired
 } from "@auth0/auth0-react";
+import Header from "components/Header";
 import Sidebar from "components/Sidebar";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Contacts from "views/Contacts";
@@ -37,19 +38,25 @@ const AppRouter: React.FC<AppRouterProps> = (props) => {
 
   return (
     <div className="flex flex-row">
-      <div>
+      <div className="h-screen">
         <Sidebar />
       </div>
-      <div className="flex overflow-auto">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<ProtectedProfile />} />
-          <Route path="/jobs" element={<ProtectedJobs />} />
-          <Route path="/skills" element={<ProtectedSkills />} />
-          <Route path="/contacts" element={<ProtectedContacts />} />
-          <Route path="/settings" element={<ProtectedSettings />} />
-          <Route path="/developer-settings" element={<DeveloperSettings />} />
-        </Routes>
+      <div className="flex h-screen w-full flex-col bg-[#edf2f4]">
+        <Header />
+        <div className="flex overflow-y-auto">
+          <Routes>
+            <Route path="/" element={<ProtectedJobs />} />
+            <Route path="/profile" element={<ProtectedProfile />} />
+            <Route path="/jobs" element={<ProtectedJobs />} />
+            <Route path="/skills" element={<ProtectedSkills />} />
+            <Route path="/contacts" element={<ProtectedContacts />} />
+            <Route path="/settings" element={<ProtectedSettings />} />
+            <Route
+              path="/developer-settings"
+              element={<ProtectedDeveloperSettings />}
+            />
+          </Routes>
+        </div>
       </div>
     </div>
   );
