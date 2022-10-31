@@ -9,7 +9,7 @@ interface ContactsProps {}
 const Contacts: React.FC<ContactsProps> = (props) => {
   const { logout } = useAuth0();
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center space-y-10 bg-[#edf2f4] text-4xl">
+    <div className="flex w-full flex-col items-center justify-center space-y-10 bg-[#edf2f4] text-4xl">
       <UIText variant={UITextVariant.heading1}>Contacts</UIText>
       <div className="flex flex-col space-y-4">
         <UIButton onClick={logout}>Logout</UIButton>

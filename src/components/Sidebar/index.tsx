@@ -28,12 +28,12 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   });
 
   const menuItems = [
-    {
-      index: 1,
-      text: "Dashboard",
-      path: "/",
-      icon: <UIIcon type={UIIconType.dashboard} />
-    },
+    // {
+    //   index: 1,
+    //   text: "Dashboard",
+    //   path: "/",
+    //   icon: <UIIcon type={UIIconType.dashboard} />
+    // },
     {
       index: 2,
       text: "Jobs",
@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   return (
     <animated.div
       className={classNames(
-        "flex h-screen  flex-col justify-between bg-[#101C24]",
+        "flex h-full flex-col justify-between bg-[#101C24]",
         { "w-24": isCollapsed },
         { "w-[200px]": !isCollapsed }
       )}

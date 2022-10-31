@@ -3,6 +3,7 @@ import { GiSkills } from "react-icons/gi";
 import { HiBriefcase } from "react-icons/hi";
 import { MdDashboard, MdPermContactCalendar } from "react-icons/md";
 import { RiSettings3Fill } from "react-icons/ri";
+import { FaChevronDown } from "react-icons/fa";
 import { UIColor } from "../UIColor";
 
 export enum UIIconType {
@@ -10,7 +11,8 @@ export enum UIIconType {
   briefcase = "briefcase",
   skills = "skills",
   contacts = "contacts",
-  settings = "settings"
+  settings = "settings",
+  chevronDown = "chevronDown"
 }
 
 // Icons
@@ -31,7 +33,8 @@ const UIIcon: React.FC<UIIconProps> = (props) => {
     [UIIconType.briefcase]: <HiBriefcase />,
     [UIIconType.skills]: <GiSkills />,
     [UIIconType.contacts]: <MdPermContactCalendar />,
-    [UIIconType.settings]: <RiSettings3Fill />
+    [UIIconType.settings]: <RiSettings3Fill />,
+    [UIIconType.chevronDown]: <FaChevronDown />
   };
 
   return <div className={classNames(color, className)}>{icon[type]}</div>;
