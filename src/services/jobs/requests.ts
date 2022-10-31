@@ -21,14 +21,12 @@ export const createNewJob = (
   });
 };
 
-// TODO: FIX THIS SHOULD USE JOB ID
 export const deleteJob = (
   getAccessTokenSilently: () => Promise<string>,
-  jobUrl: string
+  jobId: number
 ) => {
   return makeApiCall({
-    url: jobUrl,
-    includeBase: false,
+    url: `/jobs/${jobId}`,
     method: "DELETE",
     getAccessTokenSilently: getAccessTokenSilently
   });

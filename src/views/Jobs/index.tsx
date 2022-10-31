@@ -6,6 +6,7 @@ import { create } from "domain";
 import React from "react";
 import { Job } from "services/jobs/models";
 import { createNewJob, deleteJob, getJobs } from "services/jobs/requests";
+import { ApiResponse } from "services/requests";
 import { showToast } from "services/toasts";
 
 interface JobsProps {}
@@ -27,7 +28,7 @@ const Jobs: React.FC<JobsProps> = (props) => {
     getJobs(getAccessTokenSilently)
       .then((response) => {
         if (response.ok) {
-          setJobs(response.data.jobs);
+          setJobs(response.data);
         } else {
           showToast("Error", JSON.stringify(response.data));
         }
@@ -54,8 +55,8 @@ const Jobs: React.FC<JobsProps> = (props) => {
       });
   };
 
-  const handleDeleteJob = (jobUrl) => {
-    deleteJob(getAccessTokenSilently, jobUrl)
+  const handleDeleteJob = (jobId: number) => {
+    deleteJob(getAccessTokenSilently, jobId)
       .then((response) => {
         if (response.ok) {
           setFetch((prev) => !prev);
@@ -161,7 +162,7 @@ const Jobs: React.FC<JobsProps> = (props) => {
                 <UIText variant={UITextVariant.body2}>{job?.status}</UIText>
                 <UIText variant={UITextVariant.body2}>{job?.interview}</UIText>
               </div>
-              <UIButton onClick={() => handleDeleteJob(job.self)}>
+              <UIButton onClick={() => handleDeleteJob(job?.id)}>
                 Delete Job
               </UIButton>
             </div>

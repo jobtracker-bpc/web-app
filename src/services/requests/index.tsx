@@ -10,6 +10,12 @@ interface ApiOptions {
   body?: any;
 }
 
+export interface ApiResponse<DataType> {
+  ok: boolean;
+  data: DataType;
+  status: number;
+}
+
 export const makeApiCall = async ({
   url,
   getAccessTokenSilently,
@@ -29,11 +35,10 @@ export const makeApiCall = async ({
     method,
     body: JSON.stringify(body)
   }).then((response) => {
-    if (method === "DELETE") {
-      return { ok: response.ok, status: response.status };
-    }
-
     if (response.ok) {
+      if (method === "DELETE") {
+        return { ok: response.ok, status: response.status, data: null };
+      }
       return response.json().then((data) => {
         return { ok: response.ok, status: response.status, data: data };
       });
