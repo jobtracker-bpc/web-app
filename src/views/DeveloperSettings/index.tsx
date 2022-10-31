@@ -30,7 +30,7 @@ const DeveloperSettings: React.FC<JobsProps> = (props) => {
   };
 
   return (
-    <div className="flex h-screen w-screen flex-row space-x-20 p-10">
+    <div className="flex flex-row space-x-20 p-10">
       <div className="flex max-w-[400px] flex-col space-y-10">
         <UIText variant={UITextVariant.heading1}>Developer Testing Page</UIText>
         <UIText variant={UITextVariant.body3}>
