@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
+import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import { create } from "domain";
 import React from "react";
@@ -15,12 +16,14 @@ const Jobs: React.FC<JobsProps> = (props) => {
   const [jobCreatorOpen, setJobCreatorOpen] = React.useState<boolean>(false);
   const [newJob, setNewJob] = React.useState<Job>({} as Job);
   const [fetch, setFetch] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   // Hooks
   const { logout, getAccessTokenSilently } = useAuth0();
 
   // On Mount, grab the jobs from the user
   React.useEffect(() => {
+    setLoading(true);
     getJobs(getAccessTokenSilently)
       .then((response) => {
         if (response.ok) {
@@ -31,6 +34,9 @@ const Jobs: React.FC<JobsProps> = (props) => {
       })
       .catch((error) => {
         showToast("Error", JSON.stringify(error));
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [fetch]);
 
@@ -70,89 +76,98 @@ const Jobs: React.FC<JobsProps> = (props) => {
         <UIButton onClick={() => setJobCreatorOpen((prev) => !prev)}>
           Create New Job
         </UIButton>
-        <UIButton onClick={logout}>Logout</UIButton>
       </div>
       {/* Job Creator */}
       {jobCreatorOpen && (
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col">
           <UIText variant={UITextVariant.heading2}>Create New Job</UIText>
-          <div className="flex flex-col">
-            <UIText variant={UITextVariant.body2}>Job Title</UIText>
-            <input
-              className="border border-blue-400 p-2 text-sm"
-              onChange={(e) => {
-                setNewJob({ ...newJob, job_title: e.target.value });
-              }}
-            />
+          <div className="flex flex-row flex-wrap space-x-10">
+            <div className="flex flex-col">
+              <UIText variant={UITextVariant.body2}>Job Title</UIText>
+              <input
+                className="w-[300px] border border-blue-400 p-2 text-sm"
+                onChange={(e) => {
+                  setNewJob({ ...newJob, job_title: e.target.value });
+                }}
+              />
+            </div>
+            <div className="flex flex-col">
+              <UIText variant={UITextVariant.body2}>Job Company</UIText>
+              <input
+                className=" w-[300px] border border-blue-400 p-2 text-sm"
+                onChange={(e) => {
+                  setNewJob({ ...newJob, company: e.target.value });
+                }}
+              />
+            </div>
+            <div className="flex flex-col">
+              <UIText variant={UITextVariant.body2}>Job Link</UIText>
+              <input
+                className=" w-[300px] border border-blue-400 p-2 text-sm"
+                onChange={(e) => {
+                  setNewJob({ ...newJob, job_link: e.target.value });
+                }}
+              />
+            </div>
+            <div className="flex flex-col">
+              <UIText variant={UITextVariant.body2}>Date Applied</UIText>
+              <input
+                className="w-[300px] border border-blue-400 p-2 text-sm"
+                onChange={(e) => {
+                  setNewJob({ ...newJob, date_applied: e.target.value });
+                }}
+              />
+            </div>
+            <div className="flex flex-col">
+              <UIText variant={UITextVariant.body2}>Status</UIText>
+              <input
+                className="w-[300px] border border-blue-400 p-2 text-sm"
+                onChange={(e) => {
+                  setNewJob({ ...newJob, status: e.target.value });
+                }}
+              />
+            </div>
+            <div className="flex flex-col">
+              <UIText variant={UITextVariant.body2}>Interview</UIText>
+              <input
+                className="w-[300px] border border-blue-400 p-2 text-sm"
+                onChange={(e) => {
+                  setNewJob({ ...newJob, interview: e.target.value });
+                }}
+              />
+            </div>
           </div>
-          <div className="flex flex-col">
-            <UIText variant={UITextVariant.body2}>Job Company</UIText>
-            <input
-              className="border border-blue-400 p-2 text-sm"
-              onChange={(e) => {
-                setNewJob({ ...newJob, company: e.target.value });
-              }}
-            />
-          </div>
-          <div className="flex flex-col">
-            <UIText variant={UITextVariant.body2}>Job Link</UIText>
-            <input
-              className="border border-blue-400 p-2 text-sm"
-              onChange={(e) => {
-                setNewJob({ ...newJob, job_link: e.target.value });
-              }}
-            />
-          </div>
-          <div className="flex flex-col">
-            <UIText variant={UITextVariant.body2}>Date Applied</UIText>
-            <input
-              className="border border-blue-400 p-2 text-sm"
-              onChange={(e) => {
-                setNewJob({ ...newJob, date_applied: e.target.value });
-              }}
-            />
-          </div>
-          <div className="flex flex-col">
-            <UIText variant={UITextVariant.body2}>Status</UIText>
-            <input
-              className="border border-blue-400 p-2 text-sm"
-              onChange={(e) => {
-                setNewJob({ ...newJob, status: e.target.value });
-              }}
-            />
-          </div>
-          <div className="flex flex-col">
-            <UIText variant={UITextVariant.body2}>Interview</UIText>
-            <input
-              className="border border-blue-400 p-2 text-sm"
-              onChange={(e) => {
-                setNewJob({ ...newJob, interview: e.target.value });
-              }}
-            />
-          </div>
-          <UIButton className="w-24" onClick={createJob}>
+          <UIButton className="mt-6 w-2" onClick={createJob}>
             Submit
           </UIButton>
         </div>
       )}
       {/* List of Jobs */}
-      <div className="flex flex-col space-y-2">
-        {jobs?.map((job) => (
-          <div className="flex flex-row justify-between border">
-            <div className="flex flex-row  space-x-4 ">
-              <UIText variant={UITextVariant.body2}>{job?.job_title}</UIText>
-              <UIText variant={UITextVariant.body2}>{job?.company}</UIText>
-              <UIText variant={UITextVariant.body2}>{job?.job_link}</UIText>
-              <UIText variant={UITextVariant.body2}>{job?.date_applied}</UIText>
-              <UIText variant={UITextVariant.body2}>{job?.status}</UIText>
-              <UIText variant={UITextVariant.body2}>{job?.interview}</UIText>
+      {loading ? (
+        <div className="flex flex-row justify-center">
+          <UILoadingIndicator className="text-6xl" />
+        </div>
+      ) : (
+        <div className="flex flex-col space-y-2">
+          {jobs?.map((job) => (
+            <div className="flex flex-row justify-between border">
+              <div className="flex flex-row  space-x-4 ">
+                <UIText variant={UITextVariant.body2}>{job?.job_title}</UIText>
+                <UIText variant={UITextVariant.body2}>{job?.company}</UIText>
+                <UIText variant={UITextVariant.body2}>{job?.job_link}</UIText>
+                <UIText variant={UITextVariant.body2}>
+                  {job?.date_applied}
+                </UIText>
+                <UIText variant={UITextVariant.body2}>{job?.status}</UIText>
+                <UIText variant={UITextVariant.body2}>{job?.interview}</UIText>
+              </div>
+              <UIButton onClick={() => handleDeleteJob(job.self)}>
+                Delete Job
+              </UIButton>
             </div>
-            <UIButton onClick={() => handleDeleteJob(job.self)}>
-              Delete Job
-            </UIButton>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
