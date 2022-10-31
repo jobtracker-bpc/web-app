@@ -14,7 +14,7 @@ const DeveloperSettings: React.FC<JobsProps> = (props) => {
   const { logout } = useAuth0();
   const { getAccessTokenSilently } = useAuth0();
 
-  const handleData = () => {
+  const handleData = async () => {
     makeApiCall(getAccessTokenSilently, urlInput)
       .then((response) => {
         if (response.ok) {
@@ -27,6 +27,16 @@ const DeveloperSettings: React.FC<JobsProps> = (props) => {
       .catch((err) => {
         showToast("Error", JSON.stringify(err));
       });
+  };
+
+  const handleAuthTokenCopy = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      navigator.clipboard.writeText(`Bearer ${token}`);
+      toast.success("Succesfully Copied to clipboard");
+    } catch (error) {
+      toast.error("Error Copying to Clipboard");
+    }
   };
 
   return (
@@ -49,6 +59,9 @@ const DeveloperSettings: React.FC<JobsProps> = (props) => {
 
         <div className="flex w-44 flex-col space-y-4">
           <UIButton onClick={handleData}>Test</UIButton>
+          <UIButton onClick={handleAuthTokenCopy} className="bg-red-800">
+            Copy Auth Token
+          </UIButton>
           <UIButton onClick={logout}>Logout</UIButton>
         </div>
       </div>
