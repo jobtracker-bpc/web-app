@@ -1,12 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
+import UITable from "components/UIKit/UITable";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
-import { create } from "domain";
 import React from "react";
 import { Job } from "services/jobs/models";
 import { createNewJob, deleteJob, getJobs } from "services/jobs/requests";
-import { ApiResponse } from "services/requests";
 import { showToast } from "services/toasts";
 
 interface JobsProps {}
@@ -150,7 +149,7 @@ const Jobs: React.FC<JobsProps> = (props) => {
         </div>
       ) : (
         <div className="flex flex-col space-y-2">
-          {jobs?.map((job) => (
+          {/* {jobs?.map((job) => (
             <div className="flex flex-row justify-between border">
               <div className="flex flex-row  space-x-4 ">
                 <UIText variant={UITextVariant.body2}>{job?.job_title}</UIText>
@@ -166,7 +165,8 @@ const Jobs: React.FC<JobsProps> = (props) => {
                 Delete Job
               </UIButton>
             </div>
-          ))}
+          ))} */}
+          <UITable />
         </div>
       )}
     </div>

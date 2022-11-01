@@ -1,5 +1,3 @@
-import { url } from "inspector";
-
 export const baseUrl = "https://job-tracker-365423.uc.r.appspot.com";
 
 interface ApiOptions {
