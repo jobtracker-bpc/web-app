@@ -149,24 +149,22 @@ const Jobs: React.FC<JobsProps> = (props) => {
         </div>
       ) : (
         <div className="flex flex-col space-y-2">
-          {/* {jobs?.map((job) => (
-            <div className="flex flex-row justify-between border">
-              <div className="flex flex-row  space-x-4 ">
-                <UIText variant={UITextVariant.body2}>{job?.job_title}</UIText>
-                <UIText variant={UITextVariant.body2}>{job?.company}</UIText>
-                <UIText variant={UITextVariant.body2}>{job?.job_link}</UIText>
-                <UIText variant={UITextVariant.body2}>
-                  {job?.date_applied}
-                </UIText>
-                <UIText variant={UITextVariant.body2}>{job?.status}</UIText>
-                <UIText variant={UITextVariant.body2}>{job?.interview}</UIText>
-              </div>
-              <UIButton onClick={() => handleDeleteJob(job?.id)}>
-                Delete Job
-              </UIButton>
-            </div>
-          ))} */}
-          <UITable />
+          <UITable
+            columns={[
+              {
+                title: "Job Title",
+                key: "job_title",
+                width: "300px"
+              },
+              { title: "Company", key: "company", width: "200px" },
+              { title: "Job Link", key: "job_link", width: "200px" },
+              { title: "Date Applied", key: "date_applied", width: "200px" },
+              { title: "Status", key: "status", width: "200px" },
+              { title: "Interview", key: "interview", width: "200px" }
+            ]}
+            data={jobs}
+            handleDeleteJob={handleDeleteJob}
+          />
         </div>
       )}
     </div>
