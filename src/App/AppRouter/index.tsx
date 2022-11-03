@@ -1,14 +1,10 @@
-import {
-  Auth0Provider,
-  useAuth0,
-  withAuthenticationRequired
-} from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Header from "components/Header";
 import Sidebar from "components/Sidebar";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Contacts from "views/Contacts";
 import DeveloperSettings from "views/DeveloperSettings";
-import Home from "views/Home";
+
 import Jobs from "views/Jobs";
 import Loading from "views/Loading";
 import Login from "views/Login";

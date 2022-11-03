@@ -1,12 +1,7 @@
 import React from "react";
 import classNames from "classnames";
-import { UIColor } from "components/UIKit/UIColor";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import { BiArrowFromRight } from "react-icons/bi";
-import { MdDashboard, MdPermContactCalendar } from "react-icons/md";
-import { HiBriefcase } from "react-icons/hi";
-import { GiSkills } from "react-icons/gi";
-import { RiSettings3Fill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import LogoFull from "../../assets/logo-full.svg";
 import LogoShort from "../../assets/logo-short.svg";
