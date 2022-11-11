@@ -6,11 +6,11 @@ import UIText, { UITextVariant } from "../UIText";
 interface UITable {
   columns: any[];
   data: any[];
-  handleDeleteJob: (jobId: number) => void;
+  handleDelete: (jobId: number) => void;
 }
 
 const UITable: React.FC<UITable> = (props) => {
-  const { columns, data, handleDeleteJob } = props;
+  const { columns, data, handleDelete: handleDelete } = props;
 
   // Render
   return (
@@ -39,7 +39,7 @@ const UITable: React.FC<UITable> = (props) => {
               </td>
             ))}
             <td className={"border border-gray-400 text-left"}>
-              <UIButton onClick={() => handleDeleteJob(row.id)}>
+              <UIButton onClick={() => handleDelete(row.id)}>
                 Delete
               </UIButton>
             </td>
