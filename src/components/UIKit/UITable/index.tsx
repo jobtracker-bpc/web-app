@@ -39,9 +39,7 @@ const UITable: React.FC<UITable> = (props) => {
               </td>
             ))}
             <td className={"border border-gray-400 text-left"}>
-              <UIButton onClick={() => handleDelete(row.id)}>
-                Delete
-              </UIButton>
+              <UIButton onClick={() => handleDelete(row.id)}>Delete</UIButton>
             </td>
           </tr>
         ))}
