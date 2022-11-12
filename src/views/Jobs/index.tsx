@@ -42,17 +42,17 @@ const Jobs: React.FC<JobsProps> = (props) => {
   }, [fetch]);
 
   const createJob = () => {
-    // createNewJob(getAccessTokenSilently, newJob)
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       setJobs([...jobs, response.data]);
-    //     } else {
-    //       showToast("Error", JSON.stringify(response.data));
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     showToast("Error", JSON.stringify(error));
-    //   });
+    createNewJob(getAccessTokenSilently, newJob)
+      .then((response) => {
+        if (response.ok) {
+          setJobs([...jobs, response.data]);
+        } else {
+          showToast("Error", JSON.stringify(response.data));
+        }
+      })
+      .catch((error) => {
+        showToast("Error", JSON.stringify(error));
+      });
   };
 
   const handleDeleteJob = (jobId: number) => {
