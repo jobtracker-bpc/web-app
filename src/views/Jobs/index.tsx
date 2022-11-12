@@ -105,13 +105,13 @@ const Jobs: React.FC<JobsProps> = (props) => {
       )}
       {jobCreatorOpen && (
         <UIModal
-          height={700}
+          height={500}
           width={600}
           headingText={"Add New Job"}
           footerButtons={[<UIButton onClick={createJob}>Submit</UIButton>]}
           onClose={() => setJobCreatorOpen((prev) => !prev)}
         >
-          <div className="flex justify-center">
+          <div className="flex flex-row justify-around">
             <div className="flex flex-col space-y-4">
               <div className="flex flex-col space-y-2">
                 <UIText variant={UITextVariant.body2}>Job Title</UIText>
@@ -127,20 +127,7 @@ const Jobs: React.FC<JobsProps> = (props) => {
                   }
                 />
               </div>
-              <div className="flex flex-col space-y-2">
-                <UIText variant={UITextVariant.body2}>Company</UIText>
-                <input
-                  className="rounded-md border border-gray-300 p-2"
-                  type="text"
-                  value={newJob.company}
-                  onChange={(e) =>
-                    setNewJob((prev) => ({
-                      ...prev,
-                      company: e.target.value
-                    }))
-                  }
-                />
-              </div>
+
               <div className="flex flex-col space-y-2">
                 <UIText variant={UITextVariant.body2}>Job Link</UIText>
                 <input
@@ -155,20 +142,7 @@ const Jobs: React.FC<JobsProps> = (props) => {
                   }
                 />
               </div>
-              <div className="flex flex-col space-y-2">
-                <UIText variant={UITextVariant.body2}>Date Applied</UIText>
-                <input
-                  className="rounded-md border border-gray-300 p-2"
-                  type="text"
-                  value={newJob.date_applied}
-                  onChange={(e) =>
-                    setNewJob((prev) => ({
-                      ...prev,
-                      date_applied: e.target.value
-                    }))
-                  }
-                />
-              </div>
+
               <div className="flex flex-col space-y-2">
                 <UIText variant={UITextVariant.body2}>Status</UIText>
                 <input
@@ -183,6 +157,38 @@ const Jobs: React.FC<JobsProps> = (props) => {
                   }
                 />
               </div>
+            </div>
+            <div className="flex flex-col space-y-4">
+              <div className="flex flex-col space-y-2">
+                <UIText variant={UITextVariant.body2}>Company</UIText>
+                <input
+                  className="rounded-md border border-gray-300 p-2"
+                  type="text"
+                  value={newJob.company}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      company: e.target.value
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <UIText variant={UITextVariant.body2}>Date Applied</UIText>
+                <input
+                  className="rounded-md border border-gray-300 p-2"
+                  type="text"
+                  value={newJob.date_applied}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      date_applied: e.target.value
+                    }))
+                  }
+                />
+              </div>
+
               <div className="flex flex-col space-y-2">
                 <UIText variant={UITextVariant.body2}>Interview</UIText>
                 <input

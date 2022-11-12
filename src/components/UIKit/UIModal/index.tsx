@@ -60,7 +60,8 @@ const UIModal: React.FC<UIModalProps> = (props) => {
     <ReactPortal wrapperId="react-portal-modal-container">
       <div className="absolute top-0 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50">
         <div
-          className={`h-[${height}px] w-[${width}px] flex flex-col justify-between rounded-xl bg-white`}
+          className={`flex flex-col justify-between rounded-xl bg-white`}
+          style={{ height: `${height}px`, width: `${width}px` }}
         >
           {/* Header */}
           <div>
