@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = (props) => {
             alt={user?.name}
             className="h-[48px] rounded-full"
           />
-          <UIIcon type={UIIconType.chevronDown} />
+          <UIIcon type={UIIconType.ChevronDown} />
         </div>
         {openDropdown && (
           <div

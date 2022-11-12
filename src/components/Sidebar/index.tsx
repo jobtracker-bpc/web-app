@@ -33,25 +33,25 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       index: 2,
       text: "Jobs",
       path: "/jobs",
-      icon: <UIIcon type={UIIconType.briefcase} />
+      icon: <UIIcon type={UIIconType.Briefcase} />
     },
     {
       index: 3,
       text: "Skills",
       path: "/skills",
-      icon: <UIIcon type={UIIconType.skills} />
+      icon: <UIIcon type={UIIconType.Skills} />
     },
     {
       index: 4,
       text: "Contacts",
       path: "/contacts",
-      icon: <UIIcon type={UIIconType.contacts} />
+      icon: <UIIcon type={UIIconType.Contacts} />
     },
     {
       index: 5,
       text: "DeveloperSettings",
       path: "/developer-settings",
-      icon: <UIIcon type={UIIconType.settings} />
+      icon: <UIIcon type={UIIconType.Settings} />
     }
   ];
 
@@ -133,7 +133,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             )}
           >
             <div className="pl-6 text-slate-300  group-hover:text-white">
-              <UIIcon type={UIIconType.settings} />
+              <UIIcon type={UIIconType.Settings} />
             </div>
             {!isCollapsed && (
               <UIText

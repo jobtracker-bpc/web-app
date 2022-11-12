@@ -69,10 +69,9 @@ const Jobs: React.FC<JobsProps> = (props) => {
   };
 
   return (
-    <div className=" m-10 flex w-full flex-col space-y-10 text-4xl">
+    <div className="flex w-full flex-col space-y-6 p-6">
       {/* Header */}
       <div className="flex flex-row justify-between">
-        <UIText variant={UITextVariant.heading1}>Jobs</UIText>
         <UIButton onClick={() => setJobCreatorOpen((prev) => !prev)}>
           Create New Job
         </UIButton>

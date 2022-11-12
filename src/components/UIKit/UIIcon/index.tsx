@@ -1,18 +1,25 @@
 import classNames from "classnames";
 import { GiSkills } from "react-icons/gi";
 import { HiBriefcase } from "react-icons/hi";
-import { MdDashboard, MdPermContactCalendar } from "react-icons/md";
+import {
+  MdDashboard,
+  MdPermContactCalendar,
+  MdModeEditOutline
+} from "react-icons/md";
 import { RiSettings3Fill } from "react-icons/ri";
 import { FaChevronDown } from "react-icons/fa";
 import { UIColor } from "../UIColor";
+import { AiFillDelete } from "react-icons/ai";
 
 export enum UIIconType {
-  dashboard = "dashboard",
-  briefcase = "briefcase",
-  skills = "skills",
-  contacts = "contacts",
-  settings = "settings",
-  chevronDown = "chevronDown"
+  Briefcase = "Briefcase",
+  ChevronDown = "ChevronDown",
+  Contacts = "Contacts",
+  Dashboard = "Dashboard",
+  Delete = "Delete",
+  Settings = "Settings",
+  Skills = "Skills",
+  Edit = "Edit"
 }
 
 // Icons
@@ -23,21 +30,29 @@ interface UIIconProps {
   type: UIIconType;
   // Optional: Any additional style classes to apply to the icon
   className?: string;
+  // Optional: Function call when icon Clicked
+  onClick?: () => void;
 }
 
 const UIIcon: React.FC<UIIconProps> = (props) => {
-  const { color, type, className } = props;
+  const { color, type, className, onClick } = props;
 
   const icon = {
-    [UIIconType.dashboard]: <MdDashboard />,
-    [UIIconType.briefcase]: <HiBriefcase />,
-    [UIIconType.skills]: <GiSkills />,
-    [UIIconType.contacts]: <MdPermContactCalendar />,
-    [UIIconType.settings]: <RiSettings3Fill />,
-    [UIIconType.chevronDown]: <FaChevronDown />
+    [UIIconType.Briefcase]: <HiBriefcase />,
+    [UIIconType.ChevronDown]: <FaChevronDown />,
+    [UIIconType.Contacts]: <MdPermContactCalendar />,
+    [UIIconType.Dashboard]: <MdDashboard />,
+    [UIIconType.Delete]: <AiFillDelete />,
+    [UIIconType.Edit]: <MdModeEditOutline />,
+    [UIIconType.Settings]: <RiSettings3Fill />,
+    [UIIconType.Skills]: <GiSkills />
   };
 
-  return <div className={classNames(color, className)}>{icon[type]}</div>;
+  return (
+    <div className={classNames(color, className)} onClick={onClick}>
+      {icon[type]}
+    </div>
+  );
 };
 
 export default UIIcon;

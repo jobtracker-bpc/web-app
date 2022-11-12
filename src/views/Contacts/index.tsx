@@ -5,7 +5,11 @@ import UITable from "components/UIKit/UITable";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import { Contact } from "services/contacts/models";
-import { createNewContact, deleteContact, getContacts } from "services/contacts/requests";
+import {
+  createNewContact,
+  deleteContact,
+  getContacts
+} from "services/contacts/requests";
 import { showToast } from "services/toasts";
 
 interface ContactsProps {}
@@ -13,7 +17,8 @@ interface ContactsProps {}
 const Contacts: React.FC<ContactsProps> = (props) => {
   // State
   const [contacts, setContacts] = React.useState<Contact[]>([]);
-  const [contactCreatorOpen, setContactCreatorOpen] = React.useState<boolean>(false);
+  const [contactCreatorOpen, setContactCreatorOpen] =
+    React.useState<boolean>(false);
   const [newContact, setNewContact] = React.useState<Contact>({} as Contact);
   const [fetch, setFetch] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -69,7 +74,7 @@ const Contacts: React.FC<ContactsProps> = (props) => {
   };
 
   return (
-    <div className=" m-10 flex w-full flex-col space-y-10 text-4xl">
+    <div className="flex w-full flex-col space-y-6 p-6">
       {/* Header */}
       <div className="flex flex-row justify-between">
         <UIText variant={UITextVariant.heading1}>Contacts</UIText>
@@ -114,7 +119,10 @@ const Contacts: React.FC<ContactsProps> = (props) => {
               <input
                 className="w-[300px] border border-blue-400 p-2 text-sm"
                 onChange={(e) => {
-                  setNewContact({ ...newContact, phone_number: e.target.value });
+                  setNewContact({
+                    ...newContact,
+                    phone_number: e.target.value
+                  });
                 }}
               />
             </div>
@@ -152,7 +160,7 @@ const Contacts: React.FC<ContactsProps> = (props) => {
           <UITable
             columns={[
               {
-                name: "Name",
+                title: "Name",
                 key: "name",
                 width: "300px"
               },
