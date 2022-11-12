@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
+import UIModal from "components/UIKit/UIModal";
 import UITable from "components/UIKit/UITable";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
@@ -19,7 +20,7 @@ const Jobs: React.FC<JobsProps> = (props) => {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   // Hooks
-  const { logout, getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   // On Mount, grab the jobs from the user
   React.useEffect(() => {
@@ -41,17 +42,17 @@ const Jobs: React.FC<JobsProps> = (props) => {
   }, [fetch]);
 
   const createJob = () => {
-    createNewJob(getAccessTokenSilently, newJob)
-      .then((response) => {
-        if (response.ok) {
-          setJobs([...jobs, response.data]);
-        } else {
-          showToast("Error", JSON.stringify(response.data));
-        }
-      })
-      .catch((error) => {
-        showToast("Error", JSON.stringify(error));
-      });
+    // createNewJob(getAccessTokenSilently, newJob)
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       setJobs([...jobs, response.data]);
+    //     } else {
+    //       showToast("Error", JSON.stringify(response.data));
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     showToast("Error", JSON.stringify(error));
+    //   });
   };
 
   const handleDeleteJob = (jobId: number) => {
@@ -76,71 +77,7 @@ const Jobs: React.FC<JobsProps> = (props) => {
           Create New Job
         </UIButton>
       </div>
-      {/* Job Creator */}
-      {jobCreatorOpen && (
-        <div className="flex flex-col">
-          <UIText variant={UITextVariant.heading2}>Create New Job</UIText>
-          <div className="flex flex-row flex-wrap space-x-10">
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Job Title</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, job_title: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Job Company</UIText>
-              <input
-                className=" w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, company: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Job Link</UIText>
-              <input
-                className=" w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, job_link: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Date Applied</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, date_applied: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Status</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, status: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Interview</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, interview: e.target.value });
-                }}
-              />
-            </div>
-          </div>
-          <UIButton className="mt-6 w-2" onClick={createJob}>
-            Submit
-          </UIButton>
-        </div>
-      )}
+
       {/* List of Jobs */}
       {loading ? (
         <div className="flex flex-row justify-center">
@@ -165,6 +102,104 @@ const Jobs: React.FC<JobsProps> = (props) => {
             handleDelete={handleDeleteJob}
           />
         </div>
+      )}
+      {jobCreatorOpen && (
+        <UIModal
+          height={700}
+          width={600}
+          headingText={"Add New Job"}
+          footerButtons={[<UIButton onClick={createJob}>Submit</UIButton>]}
+          onClose={() => setJobCreatorOpen((prev) => !prev)}
+        >
+          <div className="flex justify-center">
+            <div className="flex flex-col space-y-4">
+              <div className="flex flex-col space-y-2">
+                <UIText variant={UITextVariant.body2}>Job Title</UIText>
+                <input
+                  className="rounded-md border border-gray-300 p-2"
+                  type="text"
+                  value={newJob.job_title}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      job_title: e.target.value
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <UIText variant={UITextVariant.body2}>Company</UIText>
+                <input
+                  className="rounded-md border border-gray-300 p-2"
+                  type="text"
+                  value={newJob.company}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      company: e.target.value
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <UIText variant={UITextVariant.body2}>Job Link</UIText>
+                <input
+                  className="rounded-md border border-gray-300 p-2"
+                  type="text"
+                  value={newJob.job_link}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      job_link: e.target.value
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <UIText variant={UITextVariant.body2}>Date Applied</UIText>
+                <input
+                  className="rounded-md border border-gray-300 p-2"
+                  type="text"
+                  value={newJob.date_applied}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      date_applied: e.target.value
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <UIText variant={UITextVariant.body2}>Status</UIText>
+                <input
+                  className="rounded-md border border-gray-300 p-2"
+                  type="text"
+                  value={newJob.status}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      status: e.target.value
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <UIText variant={UITextVariant.body2}>Interview</UIText>
+                <input
+                  className="rounded-md border border-gray-300 p-2"
+                  type="text"
+                  value={newJob.interview}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      interview: e.target.value
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </UIModal>
       )}
     </div>
   );

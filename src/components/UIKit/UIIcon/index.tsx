@@ -10,10 +10,13 @@ import { RiSettings3Fill } from "react-icons/ri";
 import { FaChevronDown } from "react-icons/fa";
 import { UIColor } from "../UIColor";
 import { AiFillDelete } from "react-icons/ai";
+import { CgClose } from "react-icons/cg";
 
+// Icons
 export enum UIIconType {
   Briefcase = "Briefcase",
   ChevronDown = "ChevronDown",
+  Close = "Close",
   Contacts = "Contacts",
   Dashboard = "Dashboard",
   Delete = "Delete",
@@ -21,8 +24,6 @@ export enum UIIconType {
   Skills = "Skills",
   Edit = "Edit"
 }
-
-// Icons
 
 interface UIIconProps {
   color?: UIColor;
@@ -40,6 +41,7 @@ const UIIcon: React.FC<UIIconProps> = (props) => {
   const icon = {
     [UIIconType.Briefcase]: <HiBriefcase />,
     [UIIconType.ChevronDown]: <FaChevronDown />,
+    [UIIconType.Close]: <CgClose />,
     [UIIconType.Contacts]: <MdPermContactCalendar />,
     [UIIconType.Dashboard]: <MdDashboard />,
     [UIIconType.Delete]: <AiFillDelete />,

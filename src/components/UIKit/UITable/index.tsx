@@ -1,6 +1,4 @@
-import classNames from "classnames";
 import React from "react";
-import UIButton from "../UIButton";
 import UIIcon, { UIIconType } from "../UIIcon";
 import UIText, { UITextVariant } from "../UIText";
 
