@@ -36,11 +36,11 @@ const Jobs: React.FC<JobsProps> = (props) => {
         if (response.ok) {
           setJobs(response.data);
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast("Error Getting Jobs", JSON.stringify(response.data));
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Error Getting Jobs", JSON.stringify(error));
       })
       .finally(() => {
         setLoading(false);

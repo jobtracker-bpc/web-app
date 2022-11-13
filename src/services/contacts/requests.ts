@@ -9,13 +9,25 @@ export const getContacts = (getAccessTokenSilently: () => Promise<string>) => {
   });
 };
 
-export const createNewContact = (
+export const createContact = (
   getAccessTokenSilently: () => Promise<string>,
   contact: Contact
 ) => {
   return makeApiCall({
     url: "/contacts",
     method: "POST",
+    getAccessTokenSilently: getAccessTokenSilently,
+    body: contact
+  });
+};
+
+export const editContact = (
+  getAccessTokenSilently: () => Promise<string>,
+  contact: Contact
+) => {
+  return makeApiCall({
+    url: `/contacts/${contact.id}`,
+    method: "PUT",
     getAccessTokenSilently: getAccessTokenSilently,
     body: contact
   });
