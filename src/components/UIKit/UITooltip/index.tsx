@@ -14,7 +14,7 @@ interface UITooltipProps {
   // Disable the Tooltip from render
   disabled?: boolean;
   // Position
-  position: UITooltipPosition;
+  position?: UITooltipPosition;
   // Tooltip should be wrapped around this children
   children: React.ReactNode;
 }
@@ -55,10 +55,10 @@ const UITooltip: React.FC<UITooltipProps> = (props) => {
         <div
           ref={setPopperElement}
           style={styles.popper}
-          className="z-10 rounded-md bg-slate-900 p-2 shadow-md"
+          className="z-10 rounded-md border border-gray-700 bg-slate-900 py-3 px-4 shadow-md"
           {...attributes.popper}
         >
-          <div className="text-[12px] text-white">{text}</div>
+          <div className="text-[14px] text-white">{text}</div>
           <div ref={setArrowElement} style={styles.arrow} />
         </div>
       )}

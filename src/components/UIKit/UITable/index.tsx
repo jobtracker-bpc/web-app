@@ -2,6 +2,7 @@ import React from "react";
 import { Job } from "services/jobs/models";
 import UIIcon, { UIIconType } from "../UIIcon";
 import UIText, { UITextVariant } from "../UIText";
+import UITooltip, { UITooltipPosition } from "../UITooltip";
 
 interface UITable {
   columns: any[];
@@ -73,17 +74,21 @@ const UITable: React.FC<UITable> = (props) => {
                     </td>
                   ))}
                   <td className=" bg-slate-200 px-6 py-3 text-left">
-                    <div className="flex h-full flex-row justify-end space-x-2">
-                      <UIIcon
-                        type={UIIconType.Edit}
-                        onClick={() => handleEdit(row)}
-                        className="cursor-pointer rounded-lg p-2 text-2xl text-gray-700 hover:bg-gray-300 hover:text-gray-900"
-                      />
-                      <UIIcon
-                        type={UIIconType.Delete}
-                        onClick={() => handleDelete(row)}
-                        className="cursor-pointer rounded-lg p-2 text-2xl text-red-600 hover:bg-gray-300 hover:text-red-700"
-                      />
+                    <div className="flex h-full flex-row justify-end">
+                      <UITooltip text="Edit">
+                        <UIIcon
+                          type={UIIconType.Edit}
+                          onClick={() => handleEdit(row)}
+                          className="cursor-pointer rounded-lg p-2 text-2xl text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                        />
+                      </UITooltip>
+                      <UITooltip text="Delete">
+                        <UIIcon
+                          type={UIIconType.Delete}
+                          onClick={() => handleDelete(row)}
+                          className="cursor-pointer rounded-lg p-2 text-2xl text-red-600 hover:bg-gray-300 hover:text-red-700"
+                        />
+                      </UITooltip>
                     </div>
                   </td>
                 </tr>

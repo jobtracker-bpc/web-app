@@ -91,6 +91,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
         <div className="mt-6">
           {menuItems.map((item) => (
             <UITooltip
+              key={item.index}
               text={item.text}
               disabled={!isCollapsed}
               position={UITooltipPosition.right}
