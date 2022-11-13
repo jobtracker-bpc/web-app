@@ -163,7 +163,7 @@ const Jobs: React.FC<JobsProps> = (props) => {
               { title: "Interview", key: "interview", width: "200px" }
             ]}
             data={jobs}
-            handleDeleteJob={handleDeleteJob}
+            handleDelete={handleDeleteJob}
           />
         </div>
       )}
