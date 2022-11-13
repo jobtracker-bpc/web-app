@@ -9,13 +9,25 @@ export const getJobs = (getAccessTokenSilently: () => Promise<string>) => {
   });
 };
 
-export const createNewJob = (
+export const createJob = (
   getAccessTokenSilently: () => Promise<string>,
   job: Job
 ) => {
   return makeApiCall({
     url: "/jobs",
     method: "POST",
+    getAccessTokenSilently: getAccessTokenSilently,
+    body: job
+  });
+};
+
+export const editJob = (
+  getAccessTokenSilently: () => Promise<string>,
+  job: Job
+) => {
+  return makeApiCall({
+    url: `/jobs/${job.id}`,
+    method: "PUT",
     getAccessTokenSilently: getAccessTokenSilently,
     body: job
   });

@@ -1,23 +1,28 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
-import UIModal from "components/UIKit/UIModal";
 import UITable from "components/UIKit/UITable";
-import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import { Job } from "services/jobs/models";
-import { createNewJob, deleteJob, getJobs } from "services/jobs/requests";
+import { createJob, deleteJob, editJob, getJobs } from "services/jobs/requests";
 import { showToast } from "services/toasts";
+import JobConfigModal from "./JobConfigModal";
+
+export enum JobFlow {
+  Create = "Create",
+  Edit = "Edit"
+}
 
 interface JobsProps {}
 
 const Jobs: React.FC<JobsProps> = (props) => {
   // State
   const [jobs, setJobs] = React.useState<Job[]>([]);
-  const [jobCreatorOpen, setJobCreatorOpen] = React.useState<boolean>(false);
-  const [newJob, setNewJob] = React.useState<Job>({} as Job);
-  const [fetch, setFetch] = React.useState<boolean>(false);
+  const [jobConfigModalVisible, setJobConfigModalVisible] =
+    React.useState<boolean>(false);
+  const [currentJob, setCurrentJob] = React.useState<Job>({} as Job);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [currentFlow, setCurrentFlow] = React.useState<JobFlow>(JobFlow.Create);
 
   // Hooks
   const { getAccessTokenSilently } = useAuth0();
@@ -39,45 +44,92 @@ const Jobs: React.FC<JobsProps> = (props) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [fetch]);
+  }, []);
 
-  const createJob = () => {
-    createNewJob(getAccessTokenSilently, newJob)
+  const handleCreateJob = (job: Job) => {
+    setLoading(true);
+    createJob(getAccessTokenSilently, job)
       .then((response) => {
         if (response.ok) {
           setJobs([...jobs, response.data]);
+          showToast("Successfully created Job");
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast("Failed to create job", "Please try again.");
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Failed to create job", JSON.stringify(error));
+      })
+      .finally(() => {
+        setJobConfigModalVisible(false);
+        setLoading(false);
       });
   };
 
-  const handleDeleteJob = (jobId: number) => {
-    deleteJob(getAccessTokenSilently, jobId)
+  const handleEditJob = (job: Job) => {
+    setLoading(true);
+    editJob(getAccessTokenSilently, job)
       .then((response) => {
         if (response.ok) {
-          setFetch((prev) => !prev);
+          const newJobs = jobs.map((editedJob) => {
+            if (editedJob.id === response.data.id) {
+              return response.data;
+            }
+            return editedJob;
+          });
+          showToast("Successfully edited job");
+          setJobs(newJobs);
         } else {
-          showToast("Error", JSON.stringify(response.status));
+          showToast("Failed to Edit job", "Please try again.");
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Failed to Edit job", JSON.stringify(error));
+      })
+      .finally(() => {
+        setJobConfigModalVisible(false);
+        setLoading(false);
       });
+  };
+
+  const handleDeleteJob = (job: Job) => {
+    setLoading(true);
+    deleteJob(getAccessTokenSilently, job.id)
+      .then((response) => {
+        if (response.ok) {
+          const newJobs = jobs.filter((deletedJob) => deletedJob.id !== job.id);
+          setJobs(newJobs);
+          showToast("Successfully deleted Job");
+        } else {
+          showToast("Failed to delete job", "Please try again.");
+        }
+      })
+      .catch((error) => {
+        showToast("Failed to delete job", JSON.stringify(error));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const openCreateFlow = () => {
+    setCurrentFlow(JobFlow.Create);
+    setCurrentJob({} as Job);
+    setJobConfigModalVisible(true);
+  };
+
+  const openEditFlow = (job: Job) => {
+    setCurrentFlow(JobFlow.Edit);
+    setCurrentJob(job);
+    setJobConfigModalVisible(true);
   };
 
   return (
     <div className="flex w-full flex-col space-y-6 p-6">
       {/* Header */}
       <div className="flex flex-row justify-between">
-        <UIButton onClick={() => setJobCreatorOpen((prev) => !prev)}>
-          Create New Job
-        </UIButton>
+        <UIButton onClick={openCreateFlow}>Create New Job</UIButton>
       </div>
-
       {/* List of Jobs */}
       {loading ? (
         <div className="flex flex-row justify-center">
@@ -99,113 +151,21 @@ const Jobs: React.FC<JobsProps> = (props) => {
               { title: "Interview", key: "interview", width: "200px" }
             ]}
             data={jobs}
+            handleEdit={openEditFlow}
             handleDelete={handleDeleteJob}
           />
         </div>
       )}
-      {jobCreatorOpen && (
-        <UIModal
-          height={500}
-          width={600}
-          headingText={"Add New Job"}
-          footerButtons={[<UIButton onClick={createJob}>Submit</UIButton>]}
-          onClose={() => setJobCreatorOpen((prev) => !prev)}
-        >
-          <div className="flex flex-row justify-around">
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col space-y-2">
-                <UIText variant={UITextVariant.body2}>Job Title</UIText>
-                <input
-                  className="rounded-md border border-gray-300 p-2"
-                  type="text"
-                  value={newJob.job_title}
-                  onChange={(e) =>
-                    setNewJob((prev) => ({
-                      ...prev,
-                      job_title: e.target.value
-                    }))
-                  }
-                />
-              </div>
-
-              <div className="flex flex-col space-y-2">
-                <UIText variant={UITextVariant.body2}>Job Link</UIText>
-                <input
-                  className="rounded-md border border-gray-300 p-2"
-                  type="text"
-                  value={newJob.job_link}
-                  onChange={(e) =>
-                    setNewJob((prev) => ({
-                      ...prev,
-                      job_link: e.target.value
-                    }))
-                  }
-                />
-              </div>
-
-              <div className="flex flex-col space-y-2">
-                <UIText variant={UITextVariant.body2}>Status</UIText>
-                <input
-                  className="rounded-md border border-gray-300 p-2"
-                  type="text"
-                  value={newJob.status}
-                  onChange={(e) =>
-                    setNewJob((prev) => ({
-                      ...prev,
-                      status: e.target.value
-                    }))
-                  }
-                />
-              </div>
-            </div>
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col space-y-2">
-                <UIText variant={UITextVariant.body2}>Company</UIText>
-                <input
-                  className="rounded-md border border-gray-300 p-2"
-                  type="text"
-                  value={newJob.company}
-                  onChange={(e) =>
-                    setNewJob((prev) => ({
-                      ...prev,
-                      company: e.target.value
-                    }))
-                  }
-                />
-              </div>
-
-              <div className="flex flex-col space-y-2">
-                <UIText variant={UITextVariant.body2}>Date Applied</UIText>
-                <input
-                  className="rounded-md border border-gray-300 p-2"
-                  type="text"
-                  value={newJob.date_applied}
-                  onChange={(e) =>
-                    setNewJob((prev) => ({
-                      ...prev,
-                      date_applied: e.target.value
-                    }))
-                  }
-                />
-              </div>
-
-              <div className="flex flex-col space-y-2">
-                <UIText variant={UITextVariant.body2}>Interview</UIText>
-                <input
-                  className="rounded-md border border-gray-300 p-2"
-                  type="text"
-                  value={newJob.interview}
-                  onChange={(e) =>
-                    setNewJob((prev) => ({
-                      ...prev,
-                      interview: e.target.value
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        </UIModal>
+      {jobConfigModalVisible && (
+        <JobConfigModal
+          headerText={currentFlow === JobFlow.Edit ? "Edit Job" : "Create Job"}
+          submitAction={
+            currentFlow === JobFlow.Edit ? handleEditJob : handleCreateJob
+          }
+          job={currentJob}
+          onClose={() => setJobConfigModalVisible(false)}
+          loading={loading}
+        />
       )}
     </div>
   );

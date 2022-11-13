@@ -1,12 +1,15 @@
 import React from "react";
+import { Job } from "services/jobs/models";
 import UIIcon, { UIIconType } from "../UIIcon";
 import UIText, { UITextVariant } from "../UIText";
 
 interface UITable {
   columns: any[];
   data: any[];
-  handleEdit: (id: number) => void;
-  handleDelete: (id: number) => void;
+  /**  Callback for when a row is clicked, returns the row data */
+  handleEdit: (row: any) => void;
+  /** Callback for when a row is clicked, returns the row data */
+  handleDelete: (row: any) => void;
 }
 
 const UITable: React.FC<UITable> = (props) => {
@@ -42,12 +45,12 @@ const UITable: React.FC<UITable> = (props) => {
                 <div className="flex h-full flex-row justify-end space-x-6">
                   <UIIcon
                     type={UIIconType.Edit}
-                    onClick={() => handleEdit(row.id)}
+                    onClick={() => handleEdit(row)}
                     className="cursor-pointer text-2xl text-gray-700 hover:text-gray-500"
                   />
                   <UIIcon
                     type={UIIconType.Delete}
-                    onClick={() => handleDelete(row.id)}
+                    onClick={() => handleDelete(row)}
                     className="cursor-pointer text-2xl text-red-600 hover:text-red-400"
                   />
                 </div>

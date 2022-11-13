@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import UILoadingIndicator from "../UILoadingIndicator";
 
 interface UIButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   // Function to call when button is clicked
@@ -7,10 +8,14 @@ interface UIButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   // Children that get placed inside the button
   children: React.ReactNode;
+  /** Optional: Shows a loading indiciator in the center of the button */
+  loading?: boolean;
+  /** Optional: Disables the button and its action */
+  disabled?: boolean;
 }
 
 const UIButton: React.FC<UIButtonProps> = (props) => {
-  const { className, onClick, children } = props;
+  const { className, onClick, children, loading, disabled } = props;
 
   return (
     <button
@@ -19,8 +24,9 @@ const UIButton: React.FC<UIButtonProps> = (props) => {
         className
       )}
       onClick={onClick}
+      disabled={disabled}
     >
-      {children}
+      {loading ? <UILoadingIndicator className="text-3xl" /> : children}
     </button>
   );
 };
