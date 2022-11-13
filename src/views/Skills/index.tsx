@@ -113,7 +113,7 @@ const Skills: React.FC<SkillsProps> = (props) => {
       )}
       {/* List of Skills */}
       {loading ? (
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row items-center justify-center">
           <UILoadingIndicator className="text-6xl" />
         </div>
       ) : (

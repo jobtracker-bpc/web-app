@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
+import { UIIconType } from "components/UIKit/UIIcon";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
 import React from "react";
@@ -126,13 +127,9 @@ const Jobs: React.FC<JobsProps> = (props) => {
 
   return (
     <div className="flex w-full flex-col space-y-6 p-6">
-      {/* Header */}
-      <div className="flex flex-row justify-between">
-        <UIButton onClick={openCreateFlow}>Create New Job</UIButton>
-      </div>
       {/* List of Jobs */}
       {loading ? (
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row items-center justify-center">
           <UILoadingIndicator className="text-6xl" />
         </div>
       ) : (
@@ -151,6 +148,11 @@ const Jobs: React.FC<JobsProps> = (props) => {
               { title: "Interview", key: "interview", width: "200px" }
             ]}
             data={jobs}
+            headerButtons={[
+              <UIButton onClick={openCreateFlow} iconType={UIIconType.Add}>
+                New Job
+              </UIButton>
+            ]}
             handleEdit={openEditFlow}
             handleDelete={handleDeleteJob}
           />
