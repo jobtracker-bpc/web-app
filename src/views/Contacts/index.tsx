@@ -1,30 +1,45 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
+import { UIIconType } from "components/UIKit/UIIcon";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
-import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import { Contact } from "services/contacts/models";
 import {
-  createNewContact,
+  createContact,
+  createJob,
   deleteContact,
-  getContacts
+  deleteJob,
+  editContact,
+  editJob,
+  getContacts,
+  getJobs
 } from "services/contacts/requests";
 import { showToast } from "services/toasts";
+import ContactsConfigModal from "./ContactsConfigModal";
+
+export enum ContactFlow {
+  Create = "Create",
+  Edit = "Edit"
+}
 
 interface ContactsProps {}
 
 const Contacts: React.FC<ContactsProps> = (props) => {
   // State
   const [contacts, setContacts] = React.useState<Contact[]>([]);
-  const [contactCreatorOpen, setContactCreatorOpen] =
+  const [contactConfigModalVisible, setContactConfigModalVisible] =
     React.useState<boolean>(false);
-  const [newContact, setNewContact] = React.useState<Contact>({} as Contact);
-  const [fetch, setFetch] = React.useState<boolean>(false);
+  const [currentContact, setCurrentContact] = React.useState<Contact>(
+    {} as Contact
+  );
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [currentFlow, setCurrentFlow] = React.useState<ContactFlow>(
+    ContactFlow.Create
+  );
 
   // Hooks
-  const { logout, getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   // On Mount, grab the contacts from the user
   React.useEffect(() => {
@@ -34,125 +49,102 @@ const Contacts: React.FC<ContactsProps> = (props) => {
         if (response.ok) {
           setContacts(response.data);
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast("Error Getting Contacts", JSON.stringify(response.data));
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Error Getting Contacts", JSON.stringify(error));
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [fetch]);
+  }, []);
 
-  const createContact = () => {
-    createNewContact(getAccessTokenSilently, newContact)
+  const handleCreateContact = (contact: Contact) => {
+    setLoading(true);
+    createContact(getAccessTokenSilently, contact)
       .then((response) => {
         if (response.ok) {
           setContacts([...contacts, response.data]);
+          showToast("Successfully created Contact");
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast("Failed to create contact", "Please try again.");
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Failed to create contact", JSON.stringify(error));
+      })
+      .finally(() => {
+        setContactConfigModalVisible(false);
+        setLoading(false);
       });
   };
 
-  const handleDeleteContact = (contactId: number) => {
-    deleteContact(getAccessTokenSilently, contactId)
+  const handleEditContact = (contact: Contact) => {
+    setLoading(true);
+    editContact(getAccessTokenSilently, contact)
       .then((response) => {
         if (response.ok) {
-          setFetch((prev) => !prev);
+          const newContacts = contacts.map((editedContact) => {
+            if (editedContact.id === response.data.id) {
+              return response.data;
+            }
+            return editedContact;
+          });
+          showToast("Successfully edited contact");
+          setContacts(newContacts);
         } else {
-          showToast("Error", JSON.stringify(response.status));
+          showToast("Failed to Edit contact", "Please try again.");
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Failed to Edit contact", JSON.stringify(error));
+      })
+      .finally(() => {
+        setContactConfigModalVisible(false);
+        setLoading(false);
       });
+  };
+
+  const handleDeleteContact = (contact: Contact) => {
+    setLoading(true);
+    deleteContact(getAccessTokenSilently, contact.id)
+      .then((response) => {
+        if (response.ok) {
+          const newContacts = contacts.filter(
+            (deletedContact) => deletedContact.id !== contact.id
+          );
+          setContacts(newContacts);
+          showToast("Successfully deleted Contact");
+        } else {
+          showToast("Failed to delete contact", "Please try again.");
+        }
+      })
+      .catch((error) => {
+        showToast("Failed to delete contact", JSON.stringify(error));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const openCreateFlow = () => {
+    setCurrentFlow(ContactFlow.Create);
+    setCurrentContact({} as Contact);
+    setContactConfigModalVisible(true);
+  };
+
+  const openEditFlow = (contact: Contact) => {
+    setCurrentFlow(ContactFlow.Edit);
+    setCurrentContact(contact);
+    setContactConfigModalVisible(true);
   };
 
   return (
     <div className="flex w-full flex-col space-y-6 p-6">
-      {/* Header */}
-      <div className="flex flex-row justify-between">
-        <UIText variant={UITextVariant.heading1}>Contacts</UIText>
-        <UIButton onClick={() => setContactCreatorOpen((prev) => !prev)}>
-          Add New Contact
-        </UIButton>
-      </div>
-      {/* Contact Creator */}
-      {contactCreatorOpen && (
-        <div className="flex flex-col">
-          <UIText variant={UITextVariant.heading2}>Add New Contact</UIText>
-          <div className="flex flex-row flex-wrap space-x-10">
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Name</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewContact({ ...newContact, name: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Company</UIText>
-              <input
-                className=" w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewContact({ ...newContact, company: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Position</UIText>
-              <input
-                className=" w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewContact({ ...newContact, position: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Phone Number</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewContact({
-                    ...newContact,
-                    phone_number: e.target.value
-                  });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Email</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewContact({ ...newContact, email: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>LinkedIn</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewContact({ ...newContact, linkedin: e.target.value });
-                }}
-              />
-            </div>
-          </div>
-          <UIButton className="mt-6 w-2" onClick={createContact}>
-            Submit
-          </UIButton>
-        </div>
-      )}
-      {/* List of Jobs */}
+      {/* List of Contacts */}
       {loading ? (
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row items-center justify-center">
           <UILoadingIndicator className="text-6xl" />
         </div>
       ) : (
@@ -171,9 +163,30 @@ const Contacts: React.FC<ContactsProps> = (props) => {
               { title: "LinkedIn", key: "linkedin", width: "200px" }
             ]}
             data={contacts}
+            headerButtons={[
+              <UIButton onClick={openCreateFlow} iconType={UIIconType.Add}>
+                New Contact
+              </UIButton>
+            ]}
+            handleEdit={openEditFlow}
             handleDelete={handleDeleteContact}
           />
         </div>
+      )}
+      {contactConfigModalVisible && (
+        <ContactsConfigModal
+          headerText={
+            currentFlow === ContactFlow.Edit ? "Edit Contact" : "Create Contact"
+          }
+          submitAction={
+            currentFlow === ContactFlow.Edit
+              ? handleEditContact
+              : handleCreateContact
+          }
+          contact={currentContact}
+          onClose={() => setContactConfigModalVisible(false)}
+          loading={loading}
+        />
       )}
     </div>
   );
