@@ -6,9 +6,12 @@ import { useOutsideClick } from "services/hooks/useOutsideClick";
 import { UIColor } from "components/UIKit/UIColor";
 import { useNavigate } from "react-router-dom";
 
-interface HeaderProps {}
+interface HeaderProps {
+  headerText: string;
+}
 
 const Header: React.FC<HeaderProps> = (props) => {
+  const { headerText } = props;
   // State
   const [openDropdown, setOpenDropdown] = React.useState(false);
 
@@ -35,7 +38,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           variant={UITextVariant.heading1}
           className="flex items-center justify-center"
         >
-          Jobs
+          {headerText}
         </UIText>
         <div
           onClick={handleClick}
