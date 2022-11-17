@@ -1,50 +1,114 @@
-import classNames from "classnames";
 import React from "react";
-import UIButton from "../UIButton";
+import { Job } from "services/jobs/models";
+import UIIcon, { UIIconType } from "../UIIcon";
 import UIText, { UITextVariant } from "../UIText";
+import UITooltip, { UITooltipPosition } from "../UITooltip";
 
 interface UITable {
   columns: any[];
   data: any[];
-  handleDelete: (jobId: number) => void;
+  headerButtons?: [JSX.Element];
+  /**  Callback for when a row is clicked, returns the row data */
+  handleEdit: (row: any) => void;
+  /** Callback for when a row is clicked, returns the row data */
+  handleDelete: (row: any) => void;
 }
 
 const UITable: React.FC<UITable> = (props) => {
-  const { columns, data, handleDelete: handleDelete } = props;
+  const { columns, data, headerButtons = [], handleDelete, handleEdit } = props;
+
+  // State
+  const [search, setSearch] = React.useState<string>("");
+
+  // Hooks
+  const filteredData = React.useMemo(() => {
+    return data.filter((row) => {
+      return Object.values(row)
+        .join(" ")
+        .toLowerCase()
+        .includes(search.toLowerCase());
+    });
+  }, [data, search]);
 
   // Render
   return (
-    <table>
-      <thead>
-        <tr>
-          {columns.map((column) => (
-            <th
-              key={column.id}
-              className="border border-gray-600 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-            >
-              {column.title}
-            </th>
+    <div className="relative overflow-x-auto rounded-lg bg-gray-800">
+      {/* Header */}
+      <div className="flex justify-between border-b border-gray-600 px-6 py-6 text-white">
+        <input
+          className="w-72 rounded-lg border border-gray-600 bg-gray-900 p-2.5 text-sm text-white focus:border-gray-500 focus:ring-gray-500"
+          placeholder="Search"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <div className="space-x-4">
+          {headerButtons.map((button, index) => (
+            <div key={index} className="inline-block">
+              {button}
+            </div>
           ))}
-          <th className="border border-gray-600 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-            ACTIONS
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row) => (
-          <tr>
+        </div>
+      </div>
+      <table className="w-full">
+        <thead>
+          <tr className="">
             {columns.map((column) => (
-              <td className={"border border-gray-400 text-left"}>
-                <UIText variant={UITextVariant.body2}>{row[column.key]}</UIText>
-              </td>
+              <th
+                key={column.id}
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-200"
+              >
+                {column.title}
+              </th>
             ))}
-            <td className={"border border-gray-400 text-left"}>
-              <UIButton onClick={() => handleDelete(row.id)}>Delete</UIButton>
-            </td>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {filteredData.length ? (
+            filteredData.map((row) => {
+              return (
+                <tr className="border-b border-gray-300">
+                  {columns.map((column) => (
+                    <td className="bg-gray-200 px-6 py-3 text-left">
+                      <UIText variant={UITextVariant.body2}>
+                        {row[column.key]}
+                      </UIText>
+                    </td>
+                  ))}
+                  <td className=" bg-slate-200 px-6 py-3 text-left">
+                    <div className="flex h-full flex-row justify-end">
+                      <UITooltip text="Edit">
+                        <UIIcon
+                          type={UIIconType.Edit}
+                          onClick={() => handleEdit(row)}
+                          className="cursor-pointer rounded-lg p-2 text-2xl text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                        />
+                      </UITooltip>
+                      <UITooltip text="Delete">
+                        <UIIcon
+                          type={UIIconType.Delete}
+                          onClick={() => handleDelete(row)}
+                          className="cursor-pointer rounded-lg p-2 text-2xl text-red-600 hover:bg-gray-300 hover:text-red-700"
+                        />
+                      </UITooltip>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr className="border-b border-gray-300">
+              <td
+                colSpan={1000}
+                className="w-full bg-gray-200 px-6 py-3 text-left"
+              >
+                <UIText variant={UITextVariant.body2}>No results found.</UIText>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      {/* Footer Placeholder */}
+      <div className="px-6 py-6"></div>
+    </div>
   );
 };
 

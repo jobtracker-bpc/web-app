@@ -59,7 +59,7 @@ const DeveloperSettings: React.FC<JobsProps> = (props) => {
 
         <div className="flex w-44 flex-col space-y-4">
           <UIButton onClick={handleData}>Test</UIButton>
-          <UIButton onClick={handleAuthTokenCopy} className="bg-red-800">
+          <UIButton onClick={handleAuthTokenCopy} className="!bg-red-800">
             Copy Auth Token
           </UIButton>
           <UIButton onClick={logout}>Logout</UIButton>

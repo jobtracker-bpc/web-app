@@ -1,30 +1,40 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
+import { UIIconType } from "components/UIKit/UIIcon";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import { Skill } from "services/skills/models";
 import {
-  createNewSkill,
+  createSkill,
   deleteSkill,
+  editSkill,
   getSkills
 } from "services/skills/requests";
 import { showToast } from "services/toasts";
+import SkillConfigModal from "./SkillsConfigModal";
+
+export enum SkillFlow {
+  Create = "Create",
+  Edit = "Edit"
+}
 
 interface SkillsProps {}
 
 const Skills: React.FC<SkillsProps> = (props) => {
   // State
   const [skills, setSkills] = React.useState<Skill[]>([]);
-  const [skillCreatorOpen, setSkillCreatorOpen] =
+  const [skillConfigModalVisible, setSkillConfigModalVisible] =
     React.useState<boolean>(false);
-  const [newSkill, setNewSkill] = React.useState<Skill>({} as Skill);
-  const [fetch, setFetch] = React.useState<boolean>(false);
+  const [currentSkill, setCurrentSkill] = React.useState<Skill>({} as Skill);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [currentFlow, setCurrentFlow] = React.useState<SkillFlow>(
+    SkillFlow.Create
+  );
 
   // Hooks
-  const { logout, getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   // On Mount, grab the skills from the user
   React.useEffect(() => {
@@ -34,86 +44,102 @@ const Skills: React.FC<SkillsProps> = (props) => {
         if (response.ok) {
           setSkills(response.data);
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast("Error getting Skills", JSON.stringify(response.data));
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Error getting Skills", JSON.stringify(error));
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [fetch]);
+  }, []);
 
-  const createSkill = () => {
-    createNewSkill(getAccessTokenSilently, newSkill)
+  const handleCreateSkill = (skill: Skill) => {
+    setLoading(true);
+    createSkill(getAccessTokenSilently, skill)
       .then((response) => {
         if (response.ok) {
           setSkills([...skills, response.data]);
+          showToast("Sucessfully created Skill");
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast("Failed to Create Skill", "Please try again.");
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Failed to Create Skill", JSON.stringify(error));
+      })
+      .finally(() => {
+        setSkillConfigModalVisible(false);
+        setLoading(false);
       });
   };
 
-  const handleDeleteSkill = (jobId: number) => {
-    deleteSkill(getAccessTokenSilently, jobId)
+  const handleEditSkill = (skill: Skill) => {
+    setLoading(true);
+    editSkill(getAccessTokenSilently, skill)
       .then((response) => {
         if (response.ok) {
-          setFetch((prev) => !prev);
+          const newSkills = skills.map((editedSkill) => {
+            if (editedSkill.id === response.data.id) {
+              return response.data;
+            }
+            return editSkill;
+          });
+          showToast("Successfully edited skill");
+          setSkills(newSkills);
         } else {
-          showToast("Error", JSON.stringify(response.status));
+          showToast("Failed to Edit skill", "Please try again.");
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Failed to Edit skill", JSON.stringify(error));
+      })
+      .finally(() => {
+        setSkillConfigModalVisible(false);
+        setLoading(false);
       });
+  };
+
+  const handleDeleteJob = (skill: Skill) => {
+    setLoading(true);
+    deleteSkill(getAccessTokenSilently, skill.id)
+      .then((response) => {
+        if (response.ok) {
+          const newSkills = skills.filter(
+            (deletedSkill) => deletedSkill.id !== skill.id
+          );
+          setSkills(newSkills);
+          showToast("Successfully deleted skill");
+        } else {
+          showToast("Failed to delete skill", "Please try again.");
+        }
+      })
+      .catch((error) => {
+        showToast("Failed to delete skill", JSON.stringify(error));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const openCreateFlow = () => {
+    setCurrentFlow(SkillFlow.Create);
+    setCurrentSkill({} as Skill);
+    setSkillConfigModalVisible(true);
+  };
+
+  const openEditFlow = (skill: Skill) => {
+    setCurrentFlow(SkillFlow.Edit);
+    setCurrentSkill(skill);
+    setSkillConfigModalVisible(true);
   };
 
   return (
-    <div className=" m-10 flex w-full flex-col space-y-10 text-4xl">
-      {/* Header */}
-      <div className="flex flex-row justify-between">
-        <UIText variant={UITextVariant.heading1}>Skills</UIText>
-        <UIButton onClick={() => setSkillCreatorOpen((prev) => !prev)}>
-          Add New Skill
-        </UIButton>
-      </div>
-      {/* Skill Creator */}
-      {skillCreatorOpen && (
-        <div className="flex flex-col">
-          <UIText variant={UITextVariant.heading2}>Create New Skill</UIText>
-          <div className="flex flex-row flex-wrap space-x-10">
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Skill</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewSkill({ ...newSkill, skill_name: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Skill Priority</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewSkill({ ...newSkill, skill_priority: e.target.value });
-                }}
-              />
-            </div>
-          </div>
-          <UIButton className="mt-6 w-2" onClick={createSkill}>
-            Submit
-          </UIButton>
-        </div>
-      )}
+    <div className="flex w-full flex-col space-y-6 p-6">
       {/* List of Skills */}
       {loading ? (
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row items-center justify-center">
           <UILoadingIndicator className="text-6xl" />
         </div>
       ) : (
@@ -124,9 +150,28 @@ const Skills: React.FC<SkillsProps> = (props) => {
               { title: "Skill Priority", key: "skill_priority", width: "200px" }
             ]}
             data={skills}
-            handleDelete={handleDeleteSkill}
+            headerButtons={[
+              <UIButton onClick={openCreateFlow} iconType={UIIconType.Add}>
+                New Skill
+              </UIButton>
+            ]}
+            handleEdit={openEditFlow}
+            handleDelete={handleDeleteJob}
           />
         </div>
+      )}
+      {skillConfigModalVisible && (
+        <SkillConfigModal
+          headerText={
+            currentFlow === SkillFlow.Edit ? "Edit Job" : "Create Job"
+          }
+          submitAction={
+            currentFlow === SkillFlow.Edit ? handleEditSkill : handleCreateSkill
+          }
+          skill={currentSkill}
+          onClose={() => setSkillConfigModalVisible(false)}
+          loading={loading}
+        />
       )}
     </div>
   );

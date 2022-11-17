@@ -1,6 +1,7 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Header from "components/Header";
 import Sidebar from "components/Sidebar";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Contacts from "views/Contacts";
 import DeveloperSettings from "views/DeveloperSettings";
@@ -24,6 +25,8 @@ const AppRouter: React.FC<AppRouterProps> = (props) => {
   const ProtectedDeveloperSettings =
     withAuthenticationRequired(DeveloperSettings);
 
+  const [headerText, setHeaderText] = React.useState<string>("");
+
   if (isLoading) {
     return <Loading />;
   }
@@ -35,10 +38,10 @@ const AppRouter: React.FC<AppRouterProps> = (props) => {
   return (
     <div className="flex flex-row">
       <div className="h-screen">
-        <Sidebar />
+        <Sidebar setHeaderText={setHeaderText} />
       </div>
       <div className="flex h-screen w-full flex-col bg-[#edf2f4]">
-        <Header />
+        <Header headerText={headerText} />
         <div className="flex overflow-y-auto">
           <Routes>
             <Route path="/" element={<ProtectedJobs />} />

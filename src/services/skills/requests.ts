@@ -9,13 +9,25 @@ export const getSkills = (getAccessTokenSilently: () => Promise<string>) => {
   });
 };
 
-export const createNewSkill = (
+export const createSkill = (
   getAccessTokenSilently: () => Promise<string>,
   skill: Skill
 ) => {
   return makeApiCall({
     url: "/skills",
     method: "POST",
+    getAccessTokenSilently: getAccessTokenSilently,
+    body: skill
+  });
+};
+
+export const editSkill = (
+  getAccessTokenSilently: () => Promise<string>,
+  skill: Skill
+) => {
+  return makeApiCall({
+    url: `/skills/${skill.id}`,
+    method: "PUT",
     getAccessTokenSilently: getAccessTokenSilently,
     body: skill
   });

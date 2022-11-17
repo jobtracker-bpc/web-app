@@ -1,25 +1,32 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
+import { UIIconType } from "components/UIKit/UIIcon";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
-import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import { Job } from "services/jobs/models";
-import { createNewJob, deleteJob, getJobs } from "services/jobs/requests";
+import { createJob, deleteJob, editJob, getJobs } from "services/jobs/requests";
 import { showToast } from "services/toasts";
+import JobConfigModal from "./JobConfigModal";
+
+export enum JobFlow {
+  Create = "Create",
+  Edit = "Edit"
+}
 
 interface JobsProps {}
 
 const Jobs: React.FC<JobsProps> = (props) => {
   // State
   const [jobs, setJobs] = React.useState<Job[]>([]);
-  const [jobCreatorOpen, setJobCreatorOpen] = React.useState<boolean>(false);
-  const [newJob, setNewJob] = React.useState<Job>({} as Job);
-  const [fetch, setFetch] = React.useState<boolean>(false);
+  const [jobConfigModalVisible, setJobConfigModalVisible] =
+    React.useState<boolean>(false);
+  const [currentJob, setCurrentJob] = React.useState<Job>({} as Job);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [currentFlow, setCurrentFlow] = React.useState<JobFlow>(JobFlow.Create);
 
   // Hooks
-  const { logout, getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   // On Mount, grab the jobs from the user
   React.useEffect(() => {
@@ -29,122 +36,100 @@ const Jobs: React.FC<JobsProps> = (props) => {
         if (response.ok) {
           setJobs(response.data);
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast("Error Getting Jobs", JSON.stringify(response.data));
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Error Getting Jobs", JSON.stringify(error));
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [fetch]);
+  }, []);
 
-  const createJob = () => {
-    createNewJob(getAccessTokenSilently, newJob)
+  const handleCreateJob = (job: Job) => {
+    setLoading(true);
+    createJob(getAccessTokenSilently, job)
       .then((response) => {
         if (response.ok) {
           setJobs([...jobs, response.data]);
+          showToast("Successfully created Job");
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast("Failed to create job", "Please try again.");
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Failed to create job", JSON.stringify(error));
+      })
+      .finally(() => {
+        setJobConfigModalVisible(false);
+        setLoading(false);
       });
   };
 
-  const handleDeleteJob = (jobId: number) => {
-    deleteJob(getAccessTokenSilently, jobId)
+  const handleEditJob = (job: Job) => {
+    setLoading(true);
+    editJob(getAccessTokenSilently, job)
       .then((response) => {
         if (response.ok) {
-          setFetch((prev) => !prev);
+          const newJobs = jobs.map((editedJob) => {
+            if (editedJob.id === response.data.id) {
+              return response.data;
+            }
+            return editedJob;
+          });
+          showToast("Successfully edited job");
+          setJobs(newJobs);
         } else {
-          showToast("Error", JSON.stringify(response.status));
+          showToast("Failed to Edit job", "Please try again.");
         }
       })
       .catch((error) => {
-        showToast("Error", JSON.stringify(error));
+        showToast("Failed to Edit job", JSON.stringify(error));
+      })
+      .finally(() => {
+        setJobConfigModalVisible(false);
+        setLoading(false);
       });
+  };
+
+  const handleDeleteJob = (job: Job) => {
+    setLoading(true);
+    deleteJob(getAccessTokenSilently, job.id)
+      .then((response) => {
+        if (response.ok) {
+          const newJobs = jobs.filter((deletedJob) => deletedJob.id !== job.id);
+          setJobs(newJobs);
+          showToast("Successfully deleted Job");
+        } else {
+          showToast("Failed to delete job", "Please try again.");
+        }
+      })
+      .catch((error) => {
+        showToast("Failed to delete job", JSON.stringify(error));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const openCreateFlow = () => {
+    setCurrentFlow(JobFlow.Create);
+    setCurrentJob({} as Job);
+    setJobConfigModalVisible(true);
+  };
+
+  const openEditFlow = (job: Job) => {
+    setCurrentFlow(JobFlow.Edit);
+    setCurrentJob(job);
+    setJobConfigModalVisible(true);
   };
 
   return (
-    <div className=" m-10 flex w-full flex-col space-y-10 text-4xl">
-      {/* Header */}
-      <div className="flex flex-row justify-between">
-        <UIText variant={UITextVariant.heading1}>Jobs</UIText>
-        <UIButton onClick={() => setJobCreatorOpen((prev) => !prev)}>
-          Create New Job
-        </UIButton>
-      </div>
-      {/* Job Creator */}
-      {jobCreatorOpen && (
-        <div className="flex flex-col">
-          <UIText variant={UITextVariant.heading2}>Create New Job</UIText>
-          <div className="flex flex-row flex-wrap space-x-10">
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Job Title</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, job_title: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Job Company</UIText>
-              <input
-                className=" w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, company: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Job Link</UIText>
-              <input
-                className=" w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, job_link: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Date Applied</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, date_applied: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Status</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, status: e.target.value });
-                }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <UIText variant={UITextVariant.body2}>Interview</UIText>
-              <input
-                className="w-[300px] border border-blue-400 p-2 text-sm"
-                onChange={(e) => {
-                  setNewJob({ ...newJob, interview: e.target.value });
-                }}
-              />
-            </div>
-          </div>
-          <UIButton className="mt-6 w-2" onClick={createJob}>
-            Submit
-          </UIButton>
-        </div>
-      )}
+    <div className="flex w-full flex-col space-y-6 p-6">
       {/* List of Jobs */}
       {loading ? (
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row items-center justify-center">
           <UILoadingIndicator className="text-6xl" />
         </div>
       ) : (
@@ -163,9 +148,26 @@ const Jobs: React.FC<JobsProps> = (props) => {
               { title: "Interview", key: "interview", width: "200px" }
             ]}
             data={jobs}
+            headerButtons={[
+              <UIButton onClick={openCreateFlow} iconType={UIIconType.Add}>
+                New Job
+              </UIButton>
+            ]}
+            handleEdit={openEditFlow}
             handleDelete={handleDeleteJob}
           />
         </div>
+      )}
+      {jobConfigModalVisible && (
+        <JobConfigModal
+          headerText={currentFlow === JobFlow.Edit ? "Edit Job" : "Create Job"}
+          submitAction={
+            currentFlow === JobFlow.Edit ? handleEditJob : handleCreateJob
+          }
+          job={currentJob}
+          onClose={() => setJobConfigModalVisible(false)}
+          loading={loading}
+        />
       )}
     </div>
   );
