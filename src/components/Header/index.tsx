@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = (props) => {
         </div>
         {openDropdown && (
           <div
-            className="absolute top-24 right-6 w-48 rounded-md border bg-white shadow-lg"
+            className="absolute top-24 right-6 z-50 w-48 rounded-md border bg-white shadow-lg"
             ref={dropdownRef}
           >
             <div className="flex flex-col space-y-2 p-4">
