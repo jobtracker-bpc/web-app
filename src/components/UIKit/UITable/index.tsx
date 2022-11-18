@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React from "react";
 import { Job } from "services/jobs/models";
 import UIIcon, { UIIconType } from "../UIIcon";
@@ -77,7 +78,6 @@ const UITable: React.FC<UITable> = (props) => {
       <table className="w-full">
         <thead>
           <tr className="">
-            {/* Blank spot if chevron for nested row visible */}
             {columns.map((column) => (
               <th
                 key={column.id}
@@ -102,24 +102,34 @@ const UITable: React.FC<UITable> = (props) => {
                             <UIIcon
                               type={UIIconType.ChevronDown}
                               onClick={() => handleOpenNestedRow(row.id)}
-                              className="cursor-pointer"
+                              className={classNames(
+                                "-rotate-90 transform cursor-pointer rounded-lg p-2 text-gray-700 hover:bg-slate-300 hover:text-gray-900",
+                                {
+                                  "!rotate-0 transform": visibleNestedRows.has(
+                                    row.id
+                                  )
+                                }
+                              )}
                             />
                           )}
-                          <UIText variant={UITextVariant.body2}>
+                          <UIText
+                            variant={UITextVariant.body2}
+                            className="!text-sm"
+                          >
                             {row[column.key]}
                           </UIText>
                         </div>
                       </td>
                     ))}
                     {/* Edit Icons Container */}
-                    <td className=" bg-slate-200 px-6 py-3 text-left">
+                    <td className=" bg-gray-200 px-6 py-3 text-left">
                       <div className="flex h-full flex-row justify-end">
                         {/* Edit */}
                         <UITooltip text="Edit">
                           <UIIcon
                             type={UIIconType.Edit}
                             onClick={() => handleEdit(row)}
-                            className="cursor-pointer rounded-lg p-2 text-2xl text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                            className="cursor-pointer rounded-lg p-2 text-2xl text-gray-700 hover:bg-slate-300 hover:text-gray-900"
                           />
                         </UITooltip>
                         {/* Delete */}
@@ -127,7 +137,7 @@ const UITable: React.FC<UITable> = (props) => {
                           <UIIcon
                             type={UIIconType.Delete}
                             onClick={() => handleDelete(row)}
-                            className="cursor-pointer rounded-lg p-2 text-2xl text-red-600 hover:bg-gray-300 hover:text-red-700"
+                            className="cursor-pointer rounded-lg p-2 text-2xl text-red-600 hover:bg-slate-300 hover:text-red-700"
                           />
                         </UITooltip>
                       </div>
