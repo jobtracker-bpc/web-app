@@ -3,7 +3,7 @@ import UIButton from "components/UIKit/UIButton";
 import { UIIconType } from "components/UIKit/UIIcon";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
-import { title } from "process";
+import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import { Job } from "services/jobs/models";
 import { createJob, deleteJob, editJob, getJobs } from "services/jobs/requests";
@@ -195,6 +195,24 @@ const Jobs: React.FC<JobsProps> = (props) => {
                 New Job
               </UIButton>
             ]}
+            nestedRowData={(job: Job) => {
+              return (
+                <div className="flex flex-col space-y-4">
+                  <UIText variant={UITextVariant.heading2}>Skills</UIText>
+                  <div className="flex flex-row space-x-2">
+                    <div className="rounded-full bg-slate-800 py-1 px-4 text-white">
+                      React
+                    </div>
+                    <div className="rounded-full bg-slate-800 py-1 px-4 text-white">
+                      Javascript
+                    </div>
+                    <div className="rounded-full bg-slate-800 py-1 px-4 text-white">
+                      CSS
+                    </div>
+                  </div>
+                </div>
+              );
+            }}
             handleEdit={openEditFlow}
             handleDelete={handleDeleteJob}
           />
