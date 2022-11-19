@@ -12,6 +12,7 @@ import { showToast, ToastType } from "services/toasts";
 import { isValidFields } from "services/utils/validation";
 import UIInput from "components/UIKit/UIInput";
 import { useOutsideClick } from "services/hooks/useOutsideClick";
+import UIDropdown from "components/UIKit/UIDropdown";
 
 interface JobConfigModalProps {
   headerText: string;
@@ -144,13 +145,14 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
 
         <div className="flex flex-col space-y-2">
           <UIText variant={UITextVariant.heading3}>Interview</UIText>
-          <UIInput
-            placeholder="e.g Yes/No"
-            value={localJob.interview}
+          <UIDropdown
+            placeholder="- Select an Option -"
+            dropdownRows={["Yes", "No"]}
+            defaultValue={localJob.interview}
             onChange={(e) =>
               setLocalJob((prev) => ({
                 ...prev,
-                interview: e.target.value
+                interview: e
               }))
             }
           />
