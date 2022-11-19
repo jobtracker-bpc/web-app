@@ -6,7 +6,6 @@ export const isValidFields = (object: any) => {
   if (Object.keys(object).length === 0) {
     return false;
   }
-  console.log(object);
 
   if (Object.values(object).every((value) => value !== "") === false) {
     return false;
