@@ -58,11 +58,11 @@ const UITable: React.FC<UITable> = (props) => {
 
   // Render
   return (
-    <div className="relative overflow-x-auto rounded-lg bg-gray-800">
+    <div className="relative overflow-x-auto rounded-lg bg-slate-800">
       {/* Header */}
       <div className="flex justify-between border-b border-gray-600 px-6 py-6 text-white">
         <input
-          className="w-72 rounded-lg border border-gray-600 bg-gray-900 p-2.5 text-sm text-white focus:border-gray-500 focus:ring-gray-500"
+          className="w-72 rounded-lg border border-gray-600 bg-slate-900 p-2.5 text-sm text-white focus:border-gray-500 focus:ring-gray-500"
           placeholder="Search"
           onChange={(e) => setSearch(e.target.value)}
         />

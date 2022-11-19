@@ -1,4 +1,5 @@
 import UIButton from "components/UIKit/UIButton";
+import UIInput from "components/UIKit/UIInput";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UIModal from "components/UIKit/UIModal";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
@@ -35,7 +36,6 @@ const SkillConfigModal: React.FC<SkillsConfigModalProps> = (props) => {
 
   return (
     <UIModal
-      height={350}
       width={600}
       headingText={headerText}
       footerButtons={[
@@ -45,28 +45,24 @@ const SkillConfigModal: React.FC<SkillsConfigModalProps> = (props) => {
       ]}
       onClose={onClose}
     >
-      <div className="flex flex-row justify-around">
-        <div className="flex flex-col space-y-4">
-          <div className="flex flex-col space-y-2">
-            <UIText variant={UITextVariant.body2}>Skill Name</UIText>
-            <input
-              className="rounded-md border border-gray-300 p-2"
-              type="text"
-              value={localSkill.skill_name}
-              onChange={(e) =>
-                setLocalSkill((prev) => ({
-                  ...prev,
-                  skill_name: e.target.value
-                }))
-              }
-            />
-          </div>
+      <div className="my-4 mx-8 flex flex-col space-y-6">
+        <div className="flex flex-col space-y-2">
+          <UIText variant={UITextVariant.heading3}>Skill Name</UIText>
+          <UIInput
+            placeholder="e.g. React"
+            value={localSkill.skill_name}
+            onChange={(e) =>
+              setLocalSkill((prev) => ({
+                ...prev,
+                skill_name: e.target.value
+              }))
+            }
+          />
         </div>
-        <div className="space-y-2">
-          <UIText variant={UITextVariant.body2}>Skill Priority</UIText>
-          <input
-            className="rounded-md border border-gray-300 p-2"
-            type="text"
+        <div className="flex flex-col space-y-2">
+          <UIText variant={UITextVariant.heading3}>Skill Priority</UIText>
+          <UIInput
+            placeholder="Skill Priority"
             value={localSkill.skill_priority}
             onChange={(e) =>
               setLocalSkill((prev) => ({

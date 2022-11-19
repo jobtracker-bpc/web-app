@@ -18,16 +18,16 @@ export const showToast = ({ title, description, toastType }: ToastProps) => {
     (t) => (
       <div
         className={classNames(
-          `flex w-[250px] max-w-[250px] flex-col justify-center space-y-2 rounded-lg border p-4 ${
+          `flex w-[350px] max-w-[300px] flex-col justify-center space-y-2 rounded-lg border p-4 ${
             t.visible ? "animate-enter" : "animate-leave"
           }`,
           { "border-green-600 bg-green-200": toastType === ToastType.Success },
           { "border-red-600 bg-red-200": toastType === ToastType.Error }
         )}
       >
-        <UIText variant={UITextVariant.heading3}>{title}</UIText>
+        <UIText variant={UITextVariant.body2}>{title}</UIText>
         {description ? (
-          <UIText variant={UITextVariant.body2}>{description}</UIText>
+          <UIText variant={UITextVariant.body3}>{description}</UIText>
         ) : null}
       </div>
     ),

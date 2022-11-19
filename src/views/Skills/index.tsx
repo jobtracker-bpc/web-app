@@ -204,7 +204,7 @@ const Skills: React.FC<SkillsProps> = (props) => {
       {skillConfigModalVisible && (
         <SkillConfigModal
           headerText={
-            currentFlow === SkillFlow.Edit ? "Edit Job" : "Create Job"
+            currentFlow === SkillFlow.Edit ? "Edit Skill" : "Create Skill"
           }
           submitAction={
             currentFlow === SkillFlow.Edit ? handleEditSkill : handleCreateSkill

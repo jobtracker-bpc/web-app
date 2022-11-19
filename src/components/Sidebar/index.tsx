@@ -78,7 +78,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   return (
     <animated.div
       className={classNames(
-        "flex h-full flex-col justify-between bg-[#101C24]",
+        "flex h-full flex-col justify-between bg-slate-900",
         { "w-24": isCollapsed },
         { "w-[200px]": !isCollapsed }
       )}
@@ -131,7 +131,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
                   <UIText
                     key={item.index}
                     variant={UITextVariant.body3}
-                    className="ml-4 text-slate-300 group-hover:text-white"
+                    className="ml-4 text-[14px] text-slate-300 group-hover:text-white"
                   >
                     {item.text}
                   </UIText>
@@ -140,33 +140,6 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             </UITooltip>
           ))}
         </div>
-      </div>
-      <div>
-        <UITooltip
-          text="Settings"
-          disabled={!isCollapsed}
-          position={UITooltipPosition.right}
-        >
-          <div
-            onClick={() => navigate("/settings")}
-            className={classNames(
-              "group flex cursor-pointer flex-row items-center py-4 hover:bg-slate-800",
-              { "px-2 py-4": isCollapsed }
-            )}
-          >
-            <div className="pl-6 text-slate-300  group-hover:text-white">
-              <UIIcon type={UIIconType.Settings} />
-            </div>
-            {!isCollapsed && (
-              <UIText
-                variant={UITextVariant.body3}
-                className="ml-4 text-slate-300 group-hover:text-white"
-              >
-                Settings
-              </UIText>
-            )}
-          </div>
-        </UITooltip>
       </div>
     </animated.div>
   );

@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
 import { UIIconType } from "components/UIKit/UIIcon";
+import UIInput from "components/UIKit/UIInput";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
