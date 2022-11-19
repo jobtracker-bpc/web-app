@@ -5,6 +5,8 @@ import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import { Job } from "services/jobs/models";
 import { Skill } from "services/skills/models";
+import { showToast, ToastType } from "services/toasts";
+import { isValidFields } from "services/utils/validation";
 
 interface SkillsConfigModalProps {
   headerText: string;
@@ -20,13 +22,24 @@ const SkillConfigModal: React.FC<SkillsConfigModalProps> = (props) => {
   // State
   const [localSkill, setLocalSkill] = React.useState<Skill>(skill);
 
+  const handleSubmit = (localSkill: Skill) => {
+    if (isValidFields(localSkill)) {
+      submitAction(localSkill);
+    } else {
+      showToast({
+        title: "Please fill out all fields",
+        toastType: ToastType.Error
+      });
+    }
+  };
+
   return (
     <UIModal
       height={350}
       width={600}
       headingText={headerText}
       footerButtons={[
-        <UIButton onClick={() => submitAction(localSkill)} loading={loading}>
+        <UIButton onClick={() => handleSubmit(localSkill)} loading={loading}>
           Submit
         </UIButton>
       ]}

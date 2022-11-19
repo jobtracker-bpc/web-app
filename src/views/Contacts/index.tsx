@@ -7,15 +7,11 @@ import React from "react";
 import { Contact } from "services/contacts/models";
 import {
   createContact,
-  createJob,
   deleteContact,
-  deleteJob,
   editContact,
-  editJob,
-  getContacts,
-  getJobs
+  getContacts
 } from "services/contacts/requests";
-import { showToast } from "services/toasts";
+import { showToast, ToastType } from "services/toasts";
 import ContactsConfigModal from "./ContactsConfigModal";
 
 export enum ContactFlow {
@@ -49,11 +45,19 @@ const Contacts: React.FC<ContactsProps> = (props) => {
         if (response.ok) {
           setContacts(response.data);
         } else {
-          showToast("Error Getting Contacts", JSON.stringify(response.data));
+          showToast({
+            title: "Error Getting Contacts",
+            description: JSON.stringify(response.data),
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Error Getting Contacts", JSON.stringify(error));
+        showToast({
+          title: "Error Getting Contacts",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -66,13 +70,24 @@ const Contacts: React.FC<ContactsProps> = (props) => {
       .then((response) => {
         if (response.ok) {
           setContacts([...contacts, response.data]);
-          showToast("Successfully created Contact");
+          showToast({
+            title: "Successfully created Contact",
+            toastType: ToastType.Success
+          });
         } else {
-          showToast("Failed to create contact", "Please try again.");
+          showToast({
+            title: "Failed to create contact",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to create contact", JSON.stringify(error));
+        showToast({
+          title: "Failed to create contact",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setContactConfigModalVisible(false);
@@ -91,14 +106,25 @@ const Contacts: React.FC<ContactsProps> = (props) => {
             }
             return editedContact;
           });
-          showToast("Successfully edited contact");
+          showToast({
+            title: "Successfully edited contact",
+            toastType: ToastType.Success
+          });
           setContacts(newContacts);
         } else {
-          showToast("Failed to Edit contact", "Please try again.");
+          showToast({
+            title: "Failed to Edit contact",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to Edit contact", JSON.stringify(error));
+        showToast({
+          title: "Failed to Edit contact",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setContactConfigModalVisible(false);
@@ -115,13 +141,24 @@ const Contacts: React.FC<ContactsProps> = (props) => {
             (deletedContact) => deletedContact.id !== contact.id
           );
           setContacts(newContacts);
-          showToast("Successfully deleted Contact");
+          showToast({
+            title: "Successfully deleted Contact",
+            toastType: ToastType.Success
+          });
         } else {
-          showToast("Failed to delete contact", "Please try again.");
+          showToast({
+            title: "Failed to delete contact",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to delete contact", JSON.stringify(error));
+        showToast({
+          title: "Failed to delete contact",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setLoading(false);

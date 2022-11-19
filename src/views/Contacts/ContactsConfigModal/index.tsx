@@ -4,6 +4,8 @@ import UIModal from "components/UIKit/UIModal";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import { Contact } from "services/contacts/models";
+import { showToast, ToastType } from "services/toasts";
+import { isValidFields } from "services/utils/validation";
 
 interface ContactsConfigModalProps {
   headerText: string;
@@ -19,13 +21,24 @@ const ContactsConfigModal: React.FC<ContactsConfigModalProps> = (props) => {
   // State
   const [localContact, setLocalContact] = React.useState<Contact>(contact);
 
+  const handleSubmit = (localContact: Contact) => {
+    if (isValidFields(localContact)) {
+      submitAction(localContact);
+    } else {
+      showToast({
+        title: "Please fill out all fields",
+        toastType: ToastType.Error
+      });
+    }
+  };
+
   return (
     <UIModal
       height={500}
       width={600}
       headingText={headerText}
       footerButtons={[
-        <UIButton onClick={() => submitAction(localContact)} loading={loading}>
+        <UIButton onClick={() => handleSubmit(localContact)} loading={loading}>
           Submit
         </UIButton>
       ]}

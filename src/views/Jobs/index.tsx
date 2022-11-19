@@ -3,10 +3,11 @@ import UIButton from "components/UIKit/UIButton";
 import { UIIconType } from "components/UIKit/UIIcon";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
+import { title } from "process";
 import React from "react";
 import { Job } from "services/jobs/models";
 import { createJob, deleteJob, editJob, getJobs } from "services/jobs/requests";
-import { showToast } from "services/toasts";
+import { showToast, ToastType } from "services/toasts";
 import JobConfigModal from "./JobConfigModal";
 
 export enum JobFlow {
@@ -36,11 +37,19 @@ const Jobs: React.FC<JobsProps> = (props) => {
         if (response.ok) {
           setJobs(response.data);
         } else {
-          showToast("Error Getting Jobs", JSON.stringify(response.data));
+          showToast({
+            title: "Error Getting Jobs",
+            description: JSON.stringify(response.data),
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Error Getting Jobs", JSON.stringify(error));
+        showToast({
+          title: "Error Getting Jobs",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -53,13 +62,24 @@ const Jobs: React.FC<JobsProps> = (props) => {
       .then((response) => {
         if (response.ok) {
           setJobs([...jobs, response.data]);
-          showToast("Successfully created Job");
+          showToast({
+            title: "Successfully created Job",
+            toastType: ToastType.Success
+          });
         } else {
-          showToast("Failed to create job", "Please try again.");
+          showToast({
+            title: "Failed to create job",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to create job", JSON.stringify(error));
+        showToast({
+          title: "Failed to create job",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setJobConfigModalVisible(false);
@@ -78,14 +98,25 @@ const Jobs: React.FC<JobsProps> = (props) => {
             }
             return editedJob;
           });
-          showToast("Successfully edited job");
+          showToast({
+            title: "Successfully edited job",
+            toastType: ToastType.Success
+          });
           setJobs(newJobs);
         } else {
-          showToast("Failed to Edit job", "Please try again.");
+          showToast({
+            title: "Failed to Edit job",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to Edit job", JSON.stringify(error));
+        showToast({
+          title: "Failed to Edit job",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setJobConfigModalVisible(false);
@@ -100,13 +131,24 @@ const Jobs: React.FC<JobsProps> = (props) => {
         if (response.ok) {
           const newJobs = jobs.filter((deletedJob) => deletedJob.id !== job.id);
           setJobs(newJobs);
-          showToast("Successfully deleted Job");
+          showToast({
+            title: "Successfully deleted Job",
+            toastType: ToastType.Success
+          });
         } else {
-          showToast("Failed to delete job", "Please try again.");
+          showToast({
+            title: "Failed to delete job",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to delete job", JSON.stringify(error));
+        showToast({
+          title: "Failed to delete job",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setLoading(false);

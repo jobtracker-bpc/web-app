@@ -12,7 +12,7 @@ import {
   editSkill,
   getSkills
 } from "services/skills/requests";
-import { showToast } from "services/toasts";
+import { showToast, ToastType } from "services/toasts";
 import SkillConfigModal from "./SkillsConfigModal";
 
 export enum SkillFlow {
@@ -44,11 +44,19 @@ const Skills: React.FC<SkillsProps> = (props) => {
         if (response.ok) {
           setSkills(response.data);
         } else {
-          showToast("Error getting Skills", JSON.stringify(response.data));
+          showToast({
+            title: "Error getting Skills",
+            description: JSON.stringify(response.data),
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Error getting Skills", JSON.stringify(error));
+        showToast({
+          title: "Error getting Skills",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -61,13 +69,24 @@ const Skills: React.FC<SkillsProps> = (props) => {
       .then((response) => {
         if (response.ok) {
           setSkills([...skills, response.data]);
-          showToast("Sucessfully created Skill");
+          showToast({
+            title: "Sucessfully created Skill",
+            toastType: ToastType.Success
+          });
         } else {
-          showToast("Failed to Create Skill", "Please try again.");
+          showToast({
+            title: "Failed to Create Skill",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to Create Skill", JSON.stringify(error));
+        showToast({
+          title: "Failed to Create Skill",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setSkillConfigModalVisible(false);
@@ -86,14 +105,25 @@ const Skills: React.FC<SkillsProps> = (props) => {
             }
             return editSkill;
           });
-          showToast("Successfully edited skill");
+          showToast({
+            title: "Successfully edited skill",
+            toastType: ToastType.Success
+          });
           setSkills(newSkills);
         } else {
-          showToast("Failed to Edit skill", "Please try again.");
+          showToast({
+            title: "Failed to Edit skill",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to Edit skill", JSON.stringify(error));
+        showToast({
+          title: "Failed to Edit skill",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setSkillConfigModalVisible(false);
@@ -110,13 +140,24 @@ const Skills: React.FC<SkillsProps> = (props) => {
             (deletedSkill) => deletedSkill.id !== skill.id
           );
           setSkills(newSkills);
-          showToast("Successfully deleted skill");
+          showToast({
+            title: "Successfully deleted skill",
+            toastType: ToastType.Success
+          });
         } else {
-          showToast("Failed to delete skill", "Please try again.");
+          showToast({
+            title: "Failed to delete skill",
+            description: "Please try again.",
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((error) => {
-        showToast("Failed to delete skill", JSON.stringify(error));
+        showToast({
+          title: "Failed to delete skill",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
       })
       .finally(() => {
         setLoading(false);

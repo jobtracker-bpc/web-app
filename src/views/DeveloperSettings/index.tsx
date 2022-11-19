@@ -4,7 +4,7 @@ import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
 import toast from "react-hot-toast";
 import { makeApiCall } from "services/requests";
-import { showToast } from "services/toasts";
+import { showToast, ToastType } from "services/toasts";
 
 interface JobsProps {}
 
@@ -21,11 +21,19 @@ const DeveloperSettings: React.FC<JobsProps> = (props) => {
           console.log(response);
           setResults(response);
         } else {
-          showToast("Error", JSON.stringify(response.data));
+          showToast({
+            title: "Error",
+            description: JSON.stringify(response.data),
+            toastType: ToastType.Error
+          });
         }
       })
       .catch((err) => {
-        showToast("Error", JSON.stringify(err));
+        showToast({
+          title: "Error",
+          description: JSON.stringify(err),
+          toastType: ToastType.Error
+        });
       });
   };
 

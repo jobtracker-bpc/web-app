@@ -8,6 +8,8 @@ import { Job } from "services/jobs/models";
 
 import "react-day-picker/dist/style.css";
 import UIIcon, { UIIconType } from "components/UIKit/UIIcon";
+import { showToast, ToastType } from "services/toasts";
+import { isValidFields } from "services/utils/validation";
 
 interface JobConfigModalProps {
   headerText: string;
@@ -24,12 +26,23 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
   const [localJob, setLocalJob] = React.useState<Job>(job);
   const [showDatePicker, setShowDatePicker] = React.useState<boolean>(false);
 
+  const handleSubmit = (localJob: Job) => {
+    if (isValidFields(localJob)) {
+      submitAction(localJob);
+    } else {
+      showToast({
+        title: "Please fill out all fields",
+        toastType: ToastType.Error
+      });
+    }
+  };
+
   return (
     <UIModal
       width={600}
       headingText={headerText}
       footerButtons={[
-        <UIButton onClick={() => submitAction(localJob)} loading={loading}>
+        <UIButton onClick={() => handleSubmit(localJob)} loading={loading}>
           Submit
         </UIButton>
       ]}
