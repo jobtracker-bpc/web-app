@@ -9,7 +9,7 @@ interface UIModalProps {
   // Header Text of the modal
   headingText: string;
   // Height of Modal
-  height: number;
+  height?: number;
   // Width of Modal
   width: number;
   // Optional: On Close function that gets called when clicking on X button
