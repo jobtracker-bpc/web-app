@@ -3,19 +3,16 @@ import UIButton from "components/UIKit/UIButton";
 import { UIIconType } from "components/UIKit/UIIcon";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
-import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
-import { Bar } from "react-chartjs-2";
 import { Skill } from "services/skills/models";
 import {
   createSkill,
   deleteSkill,
   editSkill,
-  getSkillFrequency,
-  getSkills,
-  getTopFiveSkills
+  getSkills
 } from "services/skills/requests";
 import { showToast, ToastType } from "services/toasts";
+import SkillsChart from "./SkillsChart";
 import SkillConfigModal from "./SkillsConfigModal";
 
 export enum SkillFlow {
@@ -188,6 +185,7 @@ const Skills: React.FC<SkillsProps> = (props) => {
         </div>
       ) : (
         <div className="flex w-full flex-col space-y-6">
+          <SkillsChart />
           <UITable
             columns={[
               { title: "Skill", key: "skill_name", width: "300px" },
