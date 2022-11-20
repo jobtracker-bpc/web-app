@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import UIButton from "components/UIKit/UIButton";
-import { UIIconType } from "components/UIKit/UIIcon";
+import UIIcon, { UIIconType } from "components/UIKit/UIIcon";
 import UIInput from "components/UIKit/UIInput";
 import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
@@ -9,6 +9,7 @@ import React from "react";
 import { Job } from "services/jobs/models";
 import { createJob, deleteJob, editJob, getJobs } from "services/jobs/requests";
 import { showToast, ToastType } from "services/toasts";
+import { ContactFlow } from "views/Contacts";
 import JobConfigModal from "./JobConfigModal";
 
 export enum JobFlow {
@@ -198,17 +199,57 @@ const Jobs: React.FC<JobsProps> = (props) => {
             ]}
             nestedRowData={(job: Job) => {
               return (
-                <div className="flex flex-col space-y-4">
-                  <UIText variant={UITextVariant.heading2}>Skills</UIText>
-                  <div className="flex flex-row space-x-2">
-                    <div className="rounded-full bg-slate-800 py-1 px-4 text-white">
-                      React
+                <div className="flex flex-row justify-between">
+                  <div className="flex w-64 flex-col">
+                    <UIText variant={UITextVariant.heading2} className="mb-2">
+                      Skills
+                    </UIText>
+                    <div className="flex flex-wrap">
+                      {job?.skills?.length ? (
+                        job?.skills?.map((skill) => (
+                          <div
+                            className="font-sm m-1 flex items-center rounded-full bg-slate-800 py-1 px-2 text-white"
+                            key={skill.id}
+                          >
+                            <UIText
+                              variant={UITextVariant.body3}
+                              className="mx-2"
+                            >
+                              {skill.skill_name}
+                            </UIText>
+                          </div>
+                        ))
+                      ) : (
+                        <UIText variant={UITextVariant.body2}>
+                          No Skills Found
+                        </UIText>
+                      )}
                     </div>
-                    <div className="rounded-full bg-slate-800 py-1 px-4 text-white">
-                      Javascript
-                    </div>
-                    <div className="rounded-full bg-slate-800 py-1 px-4 text-white">
-                      CSS
+                  </div>
+                  <div className="flex flex-col">
+                    <UIText variant={UITextVariant.heading2} className="mb-2">
+                      Contacts
+                    </UIText>
+                    <div className="flex w-64 flex-wrap">
+                      {job?.contacts?.length ? (
+                        job?.contacts?.map((contact) => (
+                          <div
+                            className="font-sm m-1 flex items-center rounded-full bg-slate-800 py-1 px-2 text-white"
+                            key={contact.id}
+                          >
+                            <UIText
+                              variant={UITextVariant.body3}
+                              className="mx-2"
+                            >
+                              {contact.name}
+                            </UIText>
+                          </div>
+                        ))
+                      ) : (
+                        <UIText variant={UITextVariant.body2}>
+                          No Contacts Found
+                        </UIText>
+                      )}
                     </div>
                   </div>
                 </div>

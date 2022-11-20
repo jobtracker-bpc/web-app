@@ -13,6 +13,11 @@ import { isValidFields } from "services/utils/validation";
 import UIInput from "components/UIKit/UIInput";
 import { useOutsideClick } from "services/hooks/useOutsideClick";
 import UIDropdown from "components/UIKit/UIDropdown";
+import { Skill } from "services/skills/models";
+import { getSkills } from "services/skills/requests";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Contact } from "services/contacts/models";
+import { getContacts } from "services/contacts/requests";
 
 interface JobConfigModalProps {
   headerText: string;
@@ -28,6 +33,11 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
   // State
   const [localJob, setLocalJob] = React.useState<Job>(job);
   const [showDatePicker, setShowDatePicker] = React.useState<boolean>(false);
+  const [userSkills, setUserSkills] = React.useState<Skill[]>([]);
+  const [userContacts, setUserContacts] = React.useState<Contact[]>([]);
+
+  // Hooks
+  const { getAccessTokenSilently } = useAuth0();
 
   const handleClickOutside = () => {
     setShowDatePicker(false);
@@ -35,8 +45,56 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
 
   const dropdownRef: any = useOutsideClick(handleClickOutside);
 
+  // On Mount, grab the skills and contacts from the user
+  React.useEffect(() => {
+    getSkills(getAccessTokenSilently)
+      .then((response) => {
+        if (response.ok) {
+          setUserSkills(response.data);
+        } else {
+          showToast({
+            title: "Error getting Skills",
+            description: JSON.stringify(response.data),
+            toastType: ToastType.Error
+          });
+        }
+      })
+      .catch((error) => {
+        showToast({
+          title: "Error getting Skills",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
+      });
+    getContacts(getAccessTokenSilently)
+      .then((response) => {
+        if (response.ok) {
+          setUserContacts(response.data);
+        } else {
+          showToast({
+            title: "Error getting Contacts",
+            description: JSON.stringify(response.data),
+            toastType: ToastType.Error
+          });
+        }
+      })
+      .catch((error) => {
+        showToast({
+          title: "Error getting Contacts",
+          description: JSON.stringify(error),
+          toastType: ToastType.Error
+        });
+      });
+  }, []);
+
   const handleSubmit = (localJob: Job) => {
     if (isValidFields(localJob)) {
+      if (!localJob.skills) {
+        localJob.skills = [];
+      }
+      if (!localJob.contacts) {
+        localJob.contacts = [];
+      }
       submitAction(localJob);
     } else {
       showToast({
@@ -147,14 +205,113 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
           <UIText variant={UITextVariant.heading3}>Interview</UIText>
           <UIDropdown
             placeholder="- Select an Option -"
-            dropdownRows={["Yes", "No"]}
+            dropdownRows={[{ name: "Yes" }, { name: "No" }]}
+            dropdownStringKey="name"
             defaultValue={localJob.interview}
-            onChange={(e) =>
+            onChange={(row) =>
               setLocalJob((prev) => ({
                 ...prev,
-                interview: e
+                interview: row.name
               }))
             }
+          />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <UIText variant={UITextVariant.heading3}>Skills</UIText>
+          <div className="flex flex-wrap">
+            {localJob?.skills?.map((skill) => (
+              <div
+                className="font-sm m-1 flex items-center rounded-full bg-slate-800 py-1 px-2 text-white"
+                key={skill.id}
+              >
+                <UIIcon
+                  type={UIIconType.Close}
+                  onClick={() => {
+                    setLocalJob((prev) => ({
+                      ...prev,
+                      skills: prev.skills.filter((s) => s.id !== skill.id)
+                    }));
+                  }}
+                  className="mr-2 cursor-pointer hover:text-slate-400"
+                />
+                <UIText variant={UITextVariant.body3} className="mr-2">
+                  {skill.skill_name}
+                </UIText>
+              </div>
+            ))}
+          </div>
+          <UIDropdown
+            placeholder="- Select a Skill -"
+            dropdownRows={
+              userSkills.length ? userSkills.map((skill) => skill) : []
+            }
+            dropdownStringKey="skill_name"
+            defaultValue={localJob.skills}
+            disableLocalValue
+            onChange={(row) => {
+              if (localJob.skills) {
+                if (!localJob.skills.includes(row)) {
+                  setLocalJob((prev) => ({
+                    ...prev,
+                    skills: [...prev.skills, row]
+                  }));
+                }
+              } else {
+                setLocalJob((prev) => ({
+                  ...prev,
+                  skills: [row]
+                }));
+              }
+            }}
+          />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <UIText variant={UITextVariant.heading3}>Contacts</UIText>
+          <div className="flex flex-wrap">
+            {localJob?.contacts?.map((contact) => (
+              <div
+                className="font-sm m-1 flex items-center rounded-full bg-slate-800 py-1 px-2 text-white"
+                key={contact.id}
+              >
+                <UIIcon
+                  type={UIIconType.Close}
+                  onClick={() => {
+                    setLocalJob((prev) => ({
+                      ...prev,
+                      contacts: prev.contacts.filter((s) => s.id !== contact.id)
+                    }));
+                  }}
+                  className="mr-2 cursor-pointer hover:text-slate-400"
+                />
+                <UIText variant={UITextVariant.body3} className="mr-2">
+                  {contact.name}
+                </UIText>
+              </div>
+            ))}
+          </div>
+          <UIDropdown
+            placeholder="- Select a contact -"
+            dropdownRows={
+              userContacts.length ? userContacts.map((contact) => contact) : []
+            }
+            dropdownStringKey="name"
+            defaultValue={localJob.contacts}
+            disableLocalValue
+            onChange={(row) => {
+              if (localJob.contacts) {
+                if (!localJob.contacts.includes(row)) {
+                  setLocalJob((prev) => ({
+                    ...prev,
+                    contacts: [...prev.contacts, row]
+                  }));
+                }
+              } else {
+                setLocalJob((prev) => ({
+                  ...prev,
+                  contacts: [row]
+                }));
+              }
+            }}
           />
         </div>
       </div>

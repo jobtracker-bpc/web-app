@@ -1,3 +1,6 @@
+import { Contact } from "services/contacts/models";
+import { Skill } from "services/skills/models";
+
 export interface Job {
   id: number;
   job_title: string;
@@ -7,4 +10,6 @@ export interface Job {
   interview: string;
   status: string;
   user: string;
+  skills: Skill[];
+  contacts: Contact[];
 }

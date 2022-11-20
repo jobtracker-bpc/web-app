@@ -8,9 +8,12 @@ interface UIDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
   // Placeholder Text for the Dropdown
   placeholder?: string;
   dropdownRows: any;
+  // The String key to display on each Row
+  dropdownStringKey: string;
   defaultValue: any;
   // Function to be called when the input value changes
   onChange: (e: any) => void;
+  disableLocalValue?: boolean;
   // Optional: Any additional style classes to apply to the Input
   className?: string;
 }
@@ -18,10 +21,12 @@ interface UIDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
 const UIDropdown: React.FC<UIDropdownProps> = (props) => {
   const {
     className,
-    placeholder,
+    placeholder = "Select",
     onChange,
     dropdownRows,
     defaultValue,
+    dropdownStringKey,
+    disableLocalValue = false,
     ...rest
   } = props;
 
@@ -46,24 +51,32 @@ const UIDropdown: React.FC<UIDropdownProps> = (props) => {
         onClick={() => setShowDropdown((prev) => !prev)}
         type="text"
         placeholder={placeholder}
-        value={localValue}
+        value={disableLocalValue ? placeholder : localValue}
         readOnly
         {...rest}
       />
       {showDropdown && (
-        <div className="absolute z-50 mt-2 min-w-[200px] divide-y rounded-md border bg-white shadow-lg">
-          {dropdownRows.map((row: any) => (
-            <div
-              className="flex cursor-pointer py-2 px-4 hover:bg-slate-100"
-              onClick={() => {
-                onChange(row);
-                setLocalValue(row);
-                setShowDropdown(false);
-              }}
-            >
-              <UIText variant={UITextVariant.body2}>{row}</UIText>
+        <div className="absolute z-50 mt-2 max-h-72 min-w-[200px] divide-y overflow-auto rounded-md border bg-white shadow-lg">
+          {dropdownRows.length ? (
+            dropdownRows.map((row: any) => (
+              <div
+                className="flex cursor-pointer py-2 px-4 hover:bg-slate-100"
+                onClick={() => {
+                  onChange(row);
+                  setLocalValue(row[dropdownStringKey]);
+                  setShowDropdown(false);
+                }}
+              >
+                <UIText variant={UITextVariant.body2}>
+                  {row[dropdownStringKey]}
+                </UIText>
+              </div>
+            ))
+          ) : (
+            <div className="flex cursor-pointer py-2 px-4 ">
+              <UIText variant={UITextVariant.body2}>No Data Found</UIText>
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>
