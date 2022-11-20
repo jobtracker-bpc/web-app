@@ -43,3 +43,24 @@ export const deleteSkill = (
     getAccessTokenSilently: getAccessTokenSilently
   });
 };
+
+export const getSkillFrequency = (
+  getAccessTokenSilently: () => Promise<string>,
+  skillId: number
+) => {
+  return makeApiCall({
+    url: `/skills/${skillId}/frequency`,
+    method: "GET",
+    getAccessTokenSilently: getAccessTokenSilently
+  });
+};
+
+export const getTopFiveSkills = (
+  getAccessTokenSilently: () => Promise<string>
+) => {
+  return makeApiCall({
+    url: "/skills/topfive",
+    method: "GET",
+    getAccessTokenSilently: getAccessTokenSilently
+  });
+};

@@ -61,14 +61,14 @@ const SkillConfigModal: React.FC<SkillsConfigModalProps> = (props) => {
           />
         </div>
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Skill Priority</UIText>
+          <UIText variant={UITextVariant.heading3}>Skill Proficiency</UIText>
           <UIInput
-            placeholder="Skill Priority"
-            value={localSkill.skill_priority}
+            placeholder="Skill Proficiency"
+            value={localSkill.skill_proficiency}
             onChange={(e) =>
               setLocalSkill((prev) => ({
                 ...prev,
-                skill_priority: e.target.value
+                skill_proficiency: e.target.value
               }))
             }
           />

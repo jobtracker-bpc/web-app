@@ -5,12 +5,15 @@ import UILoadingIndicator from "components/UIKit/UILoadingIndicator";
 import UITable from "components/UIKit/UITable";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import React from "react";
+import { Bar } from "react-chartjs-2";
 import { Skill } from "services/skills/models";
 import {
   createSkill,
   deleteSkill,
   editSkill,
-  getSkills
+  getSkillFrequency,
+  getSkills,
+  getTopFiveSkills
 } from "services/skills/requests";
 import { showToast, ToastType } from "services/toasts";
 import SkillConfigModal from "./SkillsConfigModal";
@@ -184,11 +187,15 @@ const Skills: React.FC<SkillsProps> = (props) => {
           <UILoadingIndicator className="text-6xl" />
         </div>
       ) : (
-        <div className="flex flex-col space-y-2">
+        <div className="flex w-full flex-col space-y-6">
           <UITable
             columns={[
               { title: "Skill", key: "skill_name", width: "300px" },
-              { title: "Skill Priority", key: "skill_priority", width: "200px" }
+              {
+                title: "Skill Proficiency",
+                key: "skill_proficiency",
+                width: "200px"
+              }
             ]}
             data={skills}
             headerButtons={[
