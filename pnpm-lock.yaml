@@ -31,6 +31,7 @@ specifiers:
   eslint-plugin-tailwindcss: ^3.6.2
   jest: ^29.1.2
   jest-environment-jsdom: ^29.1.2
+  lottie-react: ^2.3.1
   moment-timezone: ^0.5.39
   postcss: ^8.4.17
   prettier: 2.7.1
@@ -58,6 +59,7 @@ dependencies:
   csstype: 3.1.1
   date-fns: 2.29.3
   eslint-plugin-import: 2.26.0_dzvnzej2un7roooznz6ef2if2q
+  lottie-react: 2.3.1_biqbaboplfbrettd7655fr4n2y
   moment-timezone: 0.5.39
   react: 18.2.0
   react-day-picker: 8.3.6_r6j3756ioqf5pjc2u22wj25rla
@@ -4615,6 +4617,21 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
+
+  /lottie-react/2.3.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-8cxd6XZZtECT6LoAhCftRdYrEpHxiouvB5EPiYA+TtCG5LHNYAdMS9IVIHcxKtWnpo7x16QfCLj1XLXZpaN81A==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      lottie-web: 5.9.6
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /lottie-web/5.9.6:
+    resolution: {integrity: sha512-JFs7KsHwflugH5qIXBpB4905yC1Sub2MZWtl/elvO/QC6qj1ApqbUZJyjzJseJUtVpgiDaXQLjBlIJGS7UUUXA==}
+    dev: false
 
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
