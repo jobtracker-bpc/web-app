@@ -220,14 +220,14 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
           />
         </div>
 
-        <div className="flex w-full flex-col space-y-2">
+        <div className="relative flex w-full flex-col space-y-2">
           <div className="flex items-center space-x-2 ">
             <UIText variant={UITextVariant.heading3}>Date Applied</UIText>
             <UIText variant={UITextVariant.body3} className="text-gray-400">
               ( required )
             </UIText>
           </div>
-          <div className="w-full" ref={dropdownRef}>
+          <div className=" w-full" ref={dropdownRef}>
             <UIInput
               className="w-full"
               placeholder="e.g. 2021-01-01"

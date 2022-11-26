@@ -81,7 +81,10 @@ const UIModal: React.FC<UIModalProps> = (props) => {
             {children}
           </div>
           {/* Footer */}
-          <div className="flex flex-row items-center justify-end space-x-4 border-t p-6">
+          <div className="flex flex-row items-center justify-between space-x-4 border-t p-6">
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              Please fill out all required fields before submitting.
+            </UIText>
             {footerButtons?.map((button, index) => (
               <div key={index}>{button}</div>
             ))}
