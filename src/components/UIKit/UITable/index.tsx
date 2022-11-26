@@ -2,6 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import { Job } from "services/jobs/models";
 import UIIcon, { UIIconType } from "../UIIcon";
+import UIInput from "../UIInput";
 import UIText, { UITextVariant } from "../UIText";
 import UITooltip, { UITooltipPosition } from "../UITooltip";
 
@@ -61,8 +62,9 @@ const UITable: React.FC<UITable> = (props) => {
     <div className="relative overflow-x-auto rounded-lg bg-slate-800">
       {/* Header */}
       <div className="flex justify-between border-b border-gray-600 px-6 py-6 text-white">
-        <input
-          className="w-72 rounded-lg border border-gray-600 bg-slate-900 p-2.5 text-sm text-white focus:border-gray-500 focus:ring-gray-500"
+        <UIInput
+          value={search}
+          className="w-72 border-gray-700 bg-slate-900 text-white hover:ring-slate-600 focus:border-gray-500 focus:ring-gray-500"
           placeholder="Search"
           onChange={(e) => setSearch(e.target.value)}
         />
