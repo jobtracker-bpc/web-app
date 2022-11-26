@@ -103,7 +103,7 @@ const Skills: React.FC<SkillsProps> = (props) => {
             if (editedSkill.id === response.data.id) {
               return response.data;
             }
-            return editSkill;
+            return editedSkill;
           });
           showToast({
             title: "Successfully edited skill",

@@ -1,10 +1,10 @@
 export interface Contact {
-  id: number;
+  id?: number;
   name: string;
   company: string;
   position: string;
   phone_number: string;
   email: string;
   linkedin: string;
-  user: string;
+  user?: string;
 }

@@ -21,24 +21,44 @@ const ContactsConfigModal: React.FC<ContactsConfigModalProps> = (props) => {
 
   // State
   const [localContact, setLocalContact] = React.useState<Contact>(contact);
+  const [formValid, setFormValid] = React.useState<boolean>(false);
 
   const handleSubmit = (localContact: Contact) => {
-    if (isValidFields(localContact)) {
-      submitAction(localContact);
+    submitAction(localContact);
+  };
+
+  React.useEffect(() => {
+    if (localContact.email && localContact.name) {
+      setFormValid(true);
     } else {
-      showToast({
-        title: "Please fill out all fields",
-        toastType: ToastType.Error
+      setFormValid(false);
+    }
+  }, [localContact]);
+
+  React.useEffect(() => {
+    if (!Object.keys(localContact).length) {
+      setLocalContact({
+        name: "",
+        company: "",
+        position: "",
+        phone_number: "",
+        email: "",
+        linkedin: ""
       });
     }
-  };
+  }, [contact]);
 
   return (
     <UIModal
       width={600}
       headingText={headerText}
       footerButtons={[
-        <UIButton onClick={() => handleSubmit(localContact)} loading={loading}>
+        <UIButton
+          onClick={() => handleSubmit(localContact)}
+          loading={loading}
+          disabled={!formValid}
+          className="disabled:cursor-not-allowed disabled:border-white disabled:bg-slate-300 disabled:text-slate-400"
+        >
           Submit
         </UIButton>
       ]}
@@ -46,7 +66,12 @@ const ContactsConfigModal: React.FC<ContactsConfigModalProps> = (props) => {
     >
       <div className="my-4 mx-8 flex flex-col space-y-6">
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Name</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Name</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIInput
             placeholder="e.g. John Doe"
             value={localContact.name}
@@ -101,7 +126,12 @@ const ContactsConfigModal: React.FC<ContactsConfigModalProps> = (props) => {
         </div>
 
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Email</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Email</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIInput
             placeholder="e.g. johndoe@gmail.com"
             value={localContact.email}

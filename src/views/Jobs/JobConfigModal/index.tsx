@@ -35,6 +35,7 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
   const [showDatePicker, setShowDatePicker] = React.useState<boolean>(false);
   const [userSkills, setUserSkills] = React.useState<Skill[]>([]);
   const [userContacts, setUserContacts] = React.useState<Contact[]>([]);
+  const [formValid, setFormValid] = React.useState<boolean>(false);
 
   // Hooks
   const { getAccessTokenSilently } = useAuth0();
@@ -88,21 +89,42 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
   }, []);
 
   const handleSubmit = (localJob: Job) => {
-    if (isValidFields(localJob)) {
-      if (!localJob.skills) {
-        localJob.skills = [];
-      }
-      if (!localJob.contacts) {
-        localJob.contacts = [];
-      }
-      submitAction(localJob);
+    submitAction(localJob);
+  };
+
+  React.useEffect(() => {
+    if (
+      localJob.job_title &&
+      localJob.job_link &&
+      localJob.status &&
+      localJob.company &&
+      localJob.date_applied &&
+      localJob.interview
+    ) {
+      setFormValid(true);
     } else {
-      showToast({
-        title: "Please fill out all fields",
-        toastType: ToastType.Error
+      setFormValid(false);
+    }
+  }, [localJob]);
+
+  React.useEffect(() => {
+    if (!Object.keys(localJob).length) {
+      setLocalJob({
+        job_title: "",
+        job_link: "",
+        company: "",
+        date_applied: "",
+        interview: "",
+        status: "",
+        user: "",
+        skills: [],
+        contacts: []
       });
     }
-  };
+    if (!Object.hasOwn(job, "skills")) {
+      setLocalJob({ ...localJob, skills: [], contacts: [] });
+    }
+  }, [job]);
 
   return (
     <UIModal
@@ -110,7 +132,12 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
       height={800}
       headingText={headerText}
       footerButtons={[
-        <UIButton onClick={() => handleSubmit(localJob)} loading={loading}>
+        <UIButton
+          onClick={() => handleSubmit(localJob)}
+          loading={loading}
+          disabled={!formValid}
+          className="disabled:cursor-not-allowed disabled:border-white disabled:bg-slate-300 disabled:text-slate-400"
+        >
           Submit
         </UIButton>
       ]}
@@ -118,7 +145,12 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
     >
       <div className="my-4 mx-8 flex flex-col space-y-6">
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Job Title</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Job Title</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIInput
             placeholder="e.g. Software Engineer"
             value={localJob.job_title}
@@ -132,7 +164,12 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
         </div>
 
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Job Link</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Job Link</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIInput
             placeholder="e.g. https://www.google.com/careers/"
             value={localJob.job_link}
@@ -146,7 +183,12 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
         </div>
 
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Status</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Status</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIInput
             placeholder="e.g. Applied"
             value={localJob.status}
@@ -160,7 +202,12 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
         </div>
 
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Company</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Company</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIInput
             placeholder="e.g. Google"
             value={localJob.company}
@@ -174,7 +221,12 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
         </div>
 
         <div className="flex w-full flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Date Applied</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Date Applied</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <div className="w-full" ref={dropdownRef}>
             <UIInput
               className="w-full"
@@ -203,7 +255,12 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
         </div>
 
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Interview</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Interview</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIDropdown
             placeholder="- Select an Option -"
             dropdownRows={[{ name: "Yes" }, { name: "No" }]}

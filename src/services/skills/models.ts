@@ -1,10 +1,10 @@
 import { Job } from "services/jobs/models";
 
 export interface Skill {
-  id: number;
+  id?: number;
   skill_name: string;
   skill_proficiency: string;
-  skill_frequency: number;
-  jobs: Job[];
-  user: string;
+  skill_frequency?: number;
+  jobs?: Job[];
+  user?: string;
 }

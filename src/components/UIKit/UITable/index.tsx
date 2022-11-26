@@ -118,7 +118,7 @@ const UITable: React.FC<UITable> = (props) => {
                             variant={UITextVariant.body2}
                             className="!text-sm"
                           >
-                            {row[column.key]}
+                            {String(row[column.key]) || "--"}
                           </UIText>
                         </div>
                       </td>

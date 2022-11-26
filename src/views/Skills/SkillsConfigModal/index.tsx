@@ -23,24 +23,40 @@ const SkillConfigModal: React.FC<SkillsConfigModalProps> = (props) => {
 
   // State
   const [localSkill, setLocalSkill] = React.useState<Skill>(skill);
+  const [formValid, setFormValid] = React.useState<boolean>(false);
 
   const handleSubmit = (localSkill: Skill) => {
-    if (isValidFields(localSkill)) {
-      submitAction(localSkill);
+    submitAction(localSkill);
+  };
+
+  React.useEffect(() => {
+    if (localSkill.skill_name && localSkill.skill_proficiency) {
+      setFormValid(true);
     } else {
-      showToast({
-        title: "Please fill out all fields",
-        toastType: ToastType.Error
+      setFormValid(false);
+    }
+  }, [localSkill]);
+
+  React.useEffect(() => {
+    if (!Object.keys(localSkill).length) {
+      setLocalSkill({
+        skill_name: "",
+        skill_proficiency: ""
       });
     }
-  };
+  }, [skill]);
 
   return (
     <UIModal
       width={600}
       headingText={headerText}
       footerButtons={[
-        <UIButton onClick={() => handleSubmit(localSkill)} loading={loading}>
+        <UIButton
+          onClick={() => handleSubmit(localSkill)}
+          loading={loading}
+          disabled={!formValid}
+          className="disabled:cursor-not-allowed disabled:border-white disabled:bg-slate-300 disabled:text-slate-400"
+        >
           Submit
         </UIButton>
       ]}
@@ -48,7 +64,12 @@ const SkillConfigModal: React.FC<SkillsConfigModalProps> = (props) => {
     >
       <div className="my-4 mx-8 flex flex-col space-y-6">
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Skill Name</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Skill Name</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIInput
             placeholder="e.g. React"
             value={localSkill.skill_name}
@@ -61,7 +82,12 @@ const SkillConfigModal: React.FC<SkillsConfigModalProps> = (props) => {
           />
         </div>
         <div className="flex flex-col space-y-2">
-          <UIText variant={UITextVariant.heading3}>Skill Proficiency</UIText>
+          <div className="flex items-center space-x-2 ">
+            <UIText variant={UITextVariant.heading3}>Skill Proficiency</UIText>
+            <UIText variant={UITextVariant.body3} className="text-gray-400">
+              ( required )
+            </UIText>
+          </div>
           <UIInput
             placeholder="Skill Proficiency"
             value={localSkill.skill_proficiency}
