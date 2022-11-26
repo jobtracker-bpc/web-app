@@ -193,6 +193,11 @@ const Skills: React.FC<SkillsProps> = (props) => {
                 title: "Skill Proficiency",
                 key: "skill_proficiency",
                 width: "200px"
+              },
+              {
+                title: "Skill Frequency",
+                key: "skill_frequency",
+                width: "200px"
               }
             ]}
             data={skills}

@@ -19,18 +19,18 @@ const Login: React.FC<LoginProps> = (props) => {
       <div className="mx-40 flex flex-col items-center justify-center text-center">
         {/* Hire Me Logo */}
         <div className="mb-20 rounded-xl border-4 border-dotted border-slate-600 py-20 px-10">
-          <div className="font-ubuntu mb-2  text-8xl font-extrabold text-slate-900">
+          <div className="font-ubuntu mb-4  text-7xl font-extrabold text-slate-900">
             Hire Me <span className="text-slate-500">Pls.</span>
           </div>
           {/* Description */}
           <UIText
             variant={UITextVariant.body1}
-            className="text-center text-xl text-gray-500"
+            className=" text-center text-xl text-[16px] text-gray-500"
           >
             The app that makes your job search pain less...painful.
           </UIText>
           {/* Login/Logout Buttons */}
-          <div className="mt-10 flex flex-1 flex-col items-center justify-center">
+          <div className="mt-8 flex flex-1 flex-col items-center justify-center">
             {!isAuthenticated ? (
               <UIButton onClick={loginWithRedirect}>Get Started</UIButton>
             ) : (

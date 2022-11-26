@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import UIText, { UITextVariant } from "components/UIKit/UIText";
 import { BiArrowFromRight } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import LogoFull from "../../assets/logo-full.svg";
 import LogoShort from "../../assets/logo-short.svg";
 import { animated, useSpring } from "@react-spring/web";
@@ -37,12 +37,6 @@ const menuItems = [
     text: "Contacts",
     path: "/contacts",
     icon: <UIIcon type={UIIconType.Contacts} />
-  },
-  {
-    index: 3,
-    text: "Developer Settings",
-    path: "/developer-settings",
-    icon: <UIIcon type={UIIconType.Settings} />
   }
 ];
 
@@ -56,10 +50,15 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 
   // Hooks
   const navigate = useNavigate();
+  const location = useLocation();
 
+  // On Mount, determine the route and set the header text
   React.useEffect(() => {
+    const currentTab =
+      menuItems.find((item) => item.path === location.pathname) || menuItems[0];
+    setCurrentTab(currentTab);
     setHeaderText(currentTab.text);
-  }, [currentTab]);
+  }, [currentTab, setHeaderText, location.pathname]);
 
   // Animations
   const springs = useSpring({
@@ -70,8 +69,6 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   });
 
   const handleMenuItemClick = (item: any) => {
-    setHeaderText(item.text);
-    setCurrentTab(item);
     navigate(item.path);
   };
 

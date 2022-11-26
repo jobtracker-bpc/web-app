@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import ReactPortal from "components/ReactPortal";
 import React from "react";
 import { useOutsideClick } from "services/hooks/useOutsideClick";
 import UIInput from "../UIInput";
@@ -42,7 +43,7 @@ const UIDropdown: React.FC<UIDropdownProps> = (props) => {
   const dropdownRef: any = useOutsideClick(handleClickOutside);
 
   return (
-    <div ref={dropdownRef}>
+    <div ref={dropdownRef} className="relative">
       <UIInput
         className={classNames(
           "w-full cursor-pointer rounded-md border border-gray-300 p-2  text-[14px] hover:ring-2 hover:ring-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-700",

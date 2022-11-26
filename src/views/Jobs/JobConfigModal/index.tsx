@@ -107,6 +107,7 @@ const JobConfigModal: React.FC<JobConfigModalProps> = (props) => {
   return (
     <UIModal
       width={600}
+      height={800}
       headingText={headerText}
       footerButtons={[
         <UIButton onClick={() => handleSubmit(localJob)} loading={loading}>
