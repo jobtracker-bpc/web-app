@@ -37,6 +37,12 @@ const menuItems = [
     text: "Contacts",
     path: "/contacts",
     icon: <UIIcon type={UIIconType.Contacts} />
+  },
+  {
+    index: 3,
+    text: "Developer Settings",
+    path: "/developer-settings",
+    icon: <UIIcon type={UIIconType.Settings} />
   }
 ];
 
